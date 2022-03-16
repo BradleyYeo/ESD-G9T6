@@ -1,0 +1,11 @@
+.cart {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 0px;
+    height: 100vh;
+    background-color: greenyellow;
+
+    display: block;
+}
+

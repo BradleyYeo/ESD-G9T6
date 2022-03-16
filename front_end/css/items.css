@@ -1,0 +1,18 @@
+body {
+    margin: 50px 80px 0px 80px;
+}
+
+/*
+    START OF HERO
+*/
+
+#hero {
+    font-family: var(--fredoka);
+    margin-bottom: 90px;
+}
+
+#all-items .title{
+    font-weight: 500;
+    font-size: x-large;
+    margin-bottom: 40px;
+}
