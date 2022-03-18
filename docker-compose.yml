@@ -11,7 +11,7 @@ services:
   # order:
   #   build:
   #     context: ./
-  #     dockerfile: order.Dockerfile
+  #     dockerfile: order.inventory.Dockerfile
   #   image: tame123/order:esd
   #   restart: always
   #   environment:
@@ -24,7 +24,7 @@ services:
   # shipping_record:
   #   build:
   #     context: ./
-  #     dockerfile: shipping_record.Dockerfile
+  #     dockerfile: shipping_record.inventory.Dockerfile
   #   image: tame123/shipping_record:esd
   #   restart: always
   #   environment:
@@ -65,7 +65,7 @@ services:
   # error:
   #   build:
   #     context: ./
-  #     dockerfile: error.Dockerfile
+  #     dockerfile: error.inventory.Dockerfile
   #   image: tame123/error:esd
   #   restart: always
   #   depends_on:
@@ -81,7 +81,7 @@ services:
   # place_order:
   #   build:
   #     context: ./
-  #     dockerfile: place_order.Dockerfile
+  #     dockerfile: place_order.inventory.Dockerfile
   #   image: tame123/place_order:esd
   #   restart: always
   #   depends_on:
@@ -105,7 +105,7 @@ services:
   # book:
   #   build:
   #     context: ./
-  #     dockerfile: book.Dockerfile
+  #     dockerfile: book.inventory.Dockerfile
   #   image: tame123/book:esd
   #   restart: always
   #   environment:
