@@ -8,6 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def create_continuous_resource_blueprint(blueprint_name: str, resource_type: str, resource_prefix: str) -> Blueprint:
     """
     blueprint_name: name of the blueprint, used by Flask for routing
@@ -19,7 +20,8 @@ def create_continuous_resource_blueprint(blueprint_name: str, resource_type: str
     @blueprint.route(f'/{resource_prefix}', methods=["POST"])
     def create_resource():
         logger.info("Creating resource")
-        resource = ContinuousResourceDao.create_resource(resource_type=resource_type, name=request.get_json(force=True)['name'])
+        resource = ContinuousResourceDao.create_resource(resource_type=resource_type,
+                                                         name=request.get_json(force=True)['name'])
         return ContinuousResourceSerialiser.serialise(resource), 201
 
     @blueprint.route(f'/{resource_prefix}', methods=["GET"])
@@ -51,8 +53,10 @@ def create_continuous_resource_blueprint(blueprint_name: str, resource_type: str
         """
         Get all the allocations for a specific resource
         """
-        allocations = ContinuousResourceDao.get_resource_allocations(resource_type=resource_type, resource_id=resource_id)
-        return jsonify([ContinuousResourceAllocationSerialiser.serialise(allocation) for allocation in allocations]), 200
+        allocations = ContinuousResourceDao.get_resource_allocations(resource_type=resource_type,
+                                                                     resource_id=resource_id)
+        return jsonify(
+            [ContinuousResourceAllocationSerialiser.serialise(allocation) for allocation in allocations]), 200
 
     @blueprint.route(f'/{resource_prefix}/<resource_id>/allocations', methods=["POST"])
     def create_resource_allocation(resource_id):
@@ -84,7 +88,8 @@ def create_continuous_resource_blueprint(blueprint_name: str, resource_type: str
 
         # Get the existing allocations
         existing_allocations = [allocation for allocation in resource.allocations]
-        existing_allocations.sort(key=lambda allocation: allocation.to_datetime if allocation.to_datetime else allocation.from_datetime)
+        existing_allocations.sort(
+            key=lambda allocation: allocation.to_datetime if allocation.to_datetime else allocation.from_datetime)
 
         # We can't create an allocation from infinity to infinity if there are existing allocations
         if to_infinity and from_infinity and existing_allocations:
@@ -98,39 +103,35 @@ def create_continuous_resource_blueprint(blueprint_name: str, resource_type: str
                 abort(406)
             elif allocation.from_infinity:
                 if (
-                    (to_datetime and to_datetime < allocation.to_datetime)
-                    or
-                    (from_datetime and from_datetime < allocation.to_datetime)
-                    or
-                    from_infinity
+                        (to_datetime and to_datetime < allocation.to_datetime)
+                        or
+                        (from_datetime and from_datetime < allocation.to_datetime)
+                        or
+                        from_infinity
                 ):
                     abort(406)
             elif allocation.to_infinity:
                 if (
-                    (to_datetime and to_datetime > allocation.from_datetime)
-                    or
-                    (from_datetime > allocation.from_datetime)
-                    or
-                    to_infinity
+                        (to_datetime and to_datetime > allocation.from_datetime)
+                        or
+                        (from_datetime > allocation.from_datetime)
+                        or
+                        to_infinity
                 ):
                     abort(406)
             else:
                 logger.debug("Looking at normal cases")
                 if (
-                    from_datetime
-                    and
-                    from_datetime > allocation.from_datetime
-                    and
-                    from_datetime < allocation.to_datetime
+                        from_datetime
+                        and
+                        allocation.from_datetime < from_datetime < allocation.to_datetime
                 ):
                     logger.debug("From datetime overlaps with an existing allocation")
                     abort(406)
                 if (
-                    to_datetime
-                    and
-                    to_datetime > allocation.from_datetime
-                    and
-                    to_datetime < allocation.to_datetime
+                        to_datetime
+                        and
+                        allocation.from_datetime < to_datetime < allocation.to_datetime
                 ):
                     logger.debug("To datetime overlaps with an existing allocation")
                     abort(406)
@@ -149,13 +150,13 @@ def create_continuous_resource_blueprint(blueprint_name: str, resource_type: str
         )
         return jsonify(ContinuousResourceAllocationSerialiser.serialise(allocation)), 201
 
-
     @blueprint.route(f'/{resource_prefix}/<resource_id>/allocations/<allocation_id>', methods=["GET"])
     def get_resource_allocation(resource_id, allocation_id):
         """
         Get a specific allocation by allocation id
         """
-        allocation = ContinuousResourceDao.get_resource_allocation_by_id(resource_type=resource_type, allocation_id=allocation_id)
+        allocation = ContinuousResourceDao.get_resource_allocation_by_id(resource_type=resource_type,
+                                                                         allocation_id=allocation_id)
         return ContinuousResourceAllocationSerialiser.serialise(allocation), 200
 
     @blueprint.route(f'/{resource_prefix}/all/allocations/<allocation_id>', methods=["DELETE"])
