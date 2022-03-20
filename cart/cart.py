@@ -2,12 +2,14 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import environ
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 CORS(app)
+
 
 class Cart(db.Model):
     __tablename__ = 'cart'
@@ -28,7 +30,8 @@ class Cart(db.Model):
         self.quantity = quantity
 
     def json(self):
-        return {"cart_id": self.cart_id, "customer_id": self.customer_id, "product_id": self.product_id, "product_name": self.product_name, "price": self.price, "quantity": self.quantity}
+        return {"cart_id": self.cart_id, "customer_id": self.customer_id, "product_id": self.product_id,
+                "product_name": self.product_name, "price": self.price, "quantity": self.quantity}
 
 
 # GET ALL CART IN DB
@@ -79,7 +82,8 @@ def get_cart(customer_id):
 def add_to_cart():
     cart_id = 0
     data = request.get_json()
-    cart = Cart(cart_id=cart_id, customer_id=data['customer_id'], product_id=data['product_id'], product_name=data['product_name'], price=data['price'], quantity=data['quantity'])
+    cart = Cart(cart_id=cart_id, customer_id=data['customer_id'], product_id=data['product_id'],
+                product_name=data['product_name'], price=data['price'], quantity=data['quantity'])
 
     try:
         db.session.add(cart)
@@ -111,7 +115,7 @@ def add_to_cart():
 # REMOVE ALL ITEMS FROM CUSTOMER'S CART
 @app.route("/cart/remove_all/<int:customer_id>", methods=['PUT'])
 def remove_all(customer_id):
-    #if cart is empty
+    # if cart is empty
     cart = Cart.query.filter_by(customer_id=customer_id).all()
     if not cart:
         return jsonify(
@@ -124,7 +128,7 @@ def remove_all(customer_id):
             }
         ), 404
 
-    #else remove all items in cart
+    # else remove all items in cart
     try:
         for item in cart:
             db.session.delete(item)
@@ -160,7 +164,7 @@ def update_cart():
                 "message": "Item not in cart."
             }
         ), 404
-    
+
     try:
         new_quantity = int(data['quantity'])
         item.quantity = new_quantity
