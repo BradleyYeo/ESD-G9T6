@@ -5,5 +5,5 @@ COPY inventory.reqs.txt /
 RUN pip install -r /requirements.txt
 COPY . /app
 WORKDIR /app
-EXPOSE 5001
-CMD ["python" , "./Inventory.py"]
+EXPOSE 5023
+CMD ["python" , "./inventory.py"]
