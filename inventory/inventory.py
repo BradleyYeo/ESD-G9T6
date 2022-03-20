@@ -3,7 +3,7 @@ from flask import Flask, render_template, redirect, abort, request
 from models import db, InventoryModel
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///inventory.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///inventory.sql'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
@@ -19,7 +19,7 @@ def create():
         return render_template('create.html')
 
     if request.method == "POST":
-        id = request.form["id"]
+        id = request.form["product_id"]
         product_name = request.form["product_name"]
         quantity = request.form["quantity"]
         price = request.form["price"]
@@ -41,7 +41,7 @@ def RetrieveSingleProduct(id):
     product = InventoryModel.query.filter_by(id=id).first()
     if product:
         return render_template('data.html', product=product)
-    return f"Product with id ={id} Does not exist"
+    return f"Product with product_id ={id} Does not exist"
 
 
 @app.route('/data/<int:id>/update', methods=['GET', 'POST'])
@@ -58,7 +58,7 @@ def update(id):
             db.session.add(product)
             db.session.commit()
             return redirect(f'/data/{id}')
-        return f"Product with id = {id} Does not exist"
+        return f"Product with product_id = {id} Does not exist"
 
     return render_template('update.html', product=product)
 

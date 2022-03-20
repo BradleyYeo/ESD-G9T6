@@ -30,7 +30,7 @@
 #                 }
 #             ]
 #         },
-#         "message": "items retrieved for customer with id found in data"
+#         "message": "items retrieved for customer with product_id found in data"
 #     }
 #     return jsonify(return_value), 200
 

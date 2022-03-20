@@ -33,7 +33,7 @@ class Order_history(db.Model):
     total_price = db.Column(db.Integer, nullable=False)
 
     def json(self):
-        return {'id': self.id, 'created': self.created, 'customer_id': self.customer_id,'customer_email': self.customer_email, 'order_id': self.order_id,'item_id': self.item_id, 'product_name': self.product_name, 'quantity': self.quantity, 'price': self.price, 'total_price': self.total_price}
+        return {'product_id': self.id, 'created': self.created, 'customer_id': self.customer_id,'customer_email': self.customer_email, 'order_id': self.order_id,'item_id': self.item_id, 'product_name': self.product_name, 'quantity': self.quantity, 'price': self.price, 'total_price': self.total_price}
 
 
 

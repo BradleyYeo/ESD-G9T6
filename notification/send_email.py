@@ -86,7 +86,7 @@ def send_message(email_object):
     user_id='me'
     try:
         message = (service.users().messages().send(userId=user_id, body=email_object).execute())
-        print('Message Id: %s' % message['id'])
+        print('Message Id: %s' % message['product_id'])
         return message
     except:
         print('Email failed to send')
