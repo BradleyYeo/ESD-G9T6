@@ -113,3 +113,56 @@ services:
   #     PYTHONUNBUFFERED: 1
   #   ports:
   #     - "5000:5000"
+
+
+  ##################################
+  # WIP
+  ##################################
+  # cart:
+  #   build:
+  #     context: ./checkout
+  #     dockerfile: cart.Dockerfile
+  #   image: tame123/cart:1.3
+  #   restart: always
+  #   environment:
+  #     PYTHONUNBUFFERED: 1
+  #   # ports:
+  #   #   - "5551:5551"
+      
+
+  # inventory:
+  #   build:
+  #     context: ./checkout
+  #     dockerfile: inventory.Dockerfile
+  #   image: tame123/inventory:1.3
+  #   restart: always
+  #   environment:
+  #     PYTHONUNBUFFERED: 1
+  #   # ports:
+  #   #   - "5552:5552"
+
+  # ###############################################
+  # # WIP
+  # # Checkout: Checkout microservice
+  # ###############################################
+  # checkout:
+  #   build:
+  #     context: ./checkout
+  #     dockerfile: checkout.Dockerfile
+  #   image: tame123/checkout:1.3
+  #   restart: always
+  #   depends_on:
+  #     - cart
+  #     - inventory
+  #     # - payment
+  #     # - rabbitmq
+  #     # - order_history
+  #     # - notification
+  #   environment:
+  #   #   rabbit_host: rabbitmq
+  #   #   rabbit_port: 5672
+  #   #   order_URL: http://order:5001/order
+  #   #   shipping_record_URL: http://shipping_record:5002/shipping_record 
+  #     PYTHONUNBUFFERED: 1
+  #   ports:
+  #     - "5550:5550"
