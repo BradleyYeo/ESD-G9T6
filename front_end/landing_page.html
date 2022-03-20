@@ -11,12 +11,53 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/landing_page.css">
     <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <script src="https://kit.fontawesome.com/032ebf9261.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-    <div class="cart">
+    <!-- CART -->
+    <div id="cart">
         <!-- MAKE SURE TO MAKE THE REST OF THE PAGE UNSCROLLABLE WHEN CART IS OPEN -->
+        
+        <div class="top-row">
+            <div class="close">close</div>
+            <div id="title">CART</div>
+        </div>
+
+        <div id="cart-items">
+
+        </div>
+
+        <div id="price">
+            <div id="delivery-fee"></div>
+            <div id="subtotal"></div>
+        </div>
+
+        <div id="checkout-button"></div>
     </div>
 
+    <!-- LOGIN MODAL -->
+    <div id="modal">
+        <div id="modal-content">
+            <div id="modal-close">close</div>
+            <div class="title">Pardon the Interruption.</div>
+            <p>
+                We see that you're not logged in.<br>
+                There's so many groceries waiting to be<br>
+                added to your cart. Join us now!
+            </p>
+            <a href="" id="sign-up-button">
+                <i class="fa-brands fa-facebook-square"></i>
+                <div>Sign up with Facebook</div>
+            </a>
+            <a href="" id="login-line">
+                Already have an account? <span id="link">Sign in</span>
+            </a>
+        </div>
+    </div>
+
+    <!--  NAVIGATION BAR -->
     <nav>
         <div class="nav-left">
             <a href="landing_page.html" class="nav-link">HOME</a>
@@ -26,8 +67,8 @@
             <a href="landing_page.html"><span style="color: var(--blue); font-style: italic;">BLUE</span>MART</a>
         </div>
         <div class="nav-right">
-            <a href="" class="nav-link">LOGIN/SIGN UP</a>
-            <div onclick="toggleCart()" class="cart-button">CART (0)</div>
+            <div class="nav-link" id="login-sign-up">LOGIN/SIGN UP</div>
+            <div class="cart-button" id="cart-button">CART (0)</div>
         </div>
     </nav>
 
@@ -51,5 +92,22 @@
     </div>
 
     <script src="js/cart.js"></script>
+    <script>
+        $("#login-sign-up").click(function(){
+            $("#modal").show(500);
+        });
+        $("#modal-close").click(function(){
+            $("#modal").hide(500);
+        });
+        
+
+
+        $("#cart-button").click(function(){
+            $("#cart").show(500);
+        });
+        $(".close").click(function(){
+            $("#cart").hide(500);
+        });
+    </script>
 </body>
 </html>

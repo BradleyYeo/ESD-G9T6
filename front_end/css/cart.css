@@ -1,11 +1,11 @@
-.cart {
+#cart {
     position: absolute;
     right: 0;
     top: 0;
-    width: 0px;
+    width: 40%;
     height: 100vh;
     background-color: greenyellow;
 
-    display: block;
+    display: none;
 }
 

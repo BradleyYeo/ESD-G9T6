@@ -1,0 +1,67 @@
+#modal {
+    position: fixed;
+    background-color: white;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+    width: 35%;
+    height: 70%;
+    border-radius: 6%;
+
+    padding-top: 8%;
+
+    font-family: var(--ubuntu);
+
+    display: none;
+}
+
+#modal-content{
+    margin: auto;
+    width: 70%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#modal .title{
+    font-weight: 600;
+    font-size: x-large;
+    text-align: center;
+}
+
+#modal p{
+    font-weight: 400;
+    font-size: smaller;
+    text-align: center;
+    color: lightslategray;
+    margin-bottom: 9%;
+}
+
+#sign-up-button{
+    width: 75%;
+    height: 9vh;
+    line-height: 9vh;
+    margin: auto;
+    
+    border-style: solid;
+    border-radius: 10px;
+    border-color: var(--black);
+
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+#login-line{
+    margin: auto;
+    color: var(--black);
+    cursor: default;
+}
+
+#login-line #link{
+    text-decoration: underline;
+    cursor: pointer;
+}
