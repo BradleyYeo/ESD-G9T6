@@ -1,10 +1,16 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
-from models import db, InventoryModel
+from os import environ
+
+from models import InventoryModel, db
 
 app = Flask(__name__)
 
-db.init_app(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+CORS(app)
 
 
 class NotEnoughStock(Exception):
@@ -69,4 +75,4 @@ def update_inventory():
 
 
 if __name__ == "__main__":
-    app.run("localhost", port=5023, debug=True)
+    app.run("localhost", port=5552, debug=True)
