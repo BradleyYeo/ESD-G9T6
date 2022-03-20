@@ -1,7 +1,14 @@
+from os import environ
+
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+from inventory.inventory import app
 
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy()
+CORS(app)
 
 class InventoryModel(db.Model):
     __tablename__ = "table"

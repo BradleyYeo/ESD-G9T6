@@ -1,16 +1,15 @@
-from flask import Flask, render_template, redirect, abort, request, jsonify
+from flask import Flask, request, jsonify
 
 from models import db, InventoryModel
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///inventory.sql'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db.init_app(app)
 
 
-@app.before_first_request
-def create_table():
-    db.create_all()
+class NotEnoughStock(Exception):
+    """Not enough stock"""
+    pass
 
 
 @app.route('/inventory/all')
@@ -36,23 +35,37 @@ def get_all():
     # return render_template('datalist.html', inventory=inventory)
 
 
-@app.route('/data/<int:id>/update', methods=['GET', 'POST'])
-def update(id):
-    product = InventoryModel.query.filter_by(id=id).first()
-    if request.method == 'POST':
-        if product:
-            db.session.delete(product)
+@app.route('/inventory/', methods=['PUT'])
+def update_inventory():
+    data = request.get_json()
+    product = InventoryModel.query.filter_by(product_id=data["product_id"]).first()
+    try:
+        new_quantity = int(data['quantity'])
+        if product.quantity < new_quantity:
+            raise NotEnoughStock
+        else:
+            product.quantity = new_quantity
             db.session.commit()
-            name = request.form['product_name']
-            quantity = request.form['quantity']
-            price = request.form['price']
-            product = InventoryModel(id=id, product_name=name, quantity=quantity, price=price)
-            db.session.add(product)
-            db.session.commit()
-            return redirect(f'/data/{id}')
-        return f"Product with product_id = {id} Does not exist"
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {},
+                    "message": "Success"
+                }
+            ), 200
 
-    return render_template('update.html', product=product)
+    except NotEnoughStock:
+        return jsonify(
+            {
+                "code": 400,
+                "data": {
+                    "items": [product]
+                },
+                "message": "Not enough stock"
+            }
+        )
+
+        # return render_template('update.html', product=product)
 
 
 if __name__ == "__main__":
