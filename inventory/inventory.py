@@ -1,15 +1,15 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
-
-from os import environ
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
+from os import environ
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or "mysql+mysqlconnector://root:root@localhost:8889/inventory"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy()
 CORS(app)
+
 
 class InventoryModel(db.Model):
     __tablename__ = "inventory"
@@ -30,6 +30,7 @@ class InventoryModel(db.Model):
                 "product_name": self.product_name,
                 "quantity": self.quantity,
                 "price": self.price}
+
 
 class NotEnoughStock(Exception):
     """Not enough stock"""
@@ -88,8 +89,6 @@ def update_inventory():
                 "message": "Not enough stock"
             }
         )
-
-        # return render_template('update.html', product=product)
 
 
 if __name__ == "__main__":
