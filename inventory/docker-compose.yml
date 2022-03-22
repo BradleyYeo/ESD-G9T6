@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+
+  inventory:
+    build:
+      context: ./inventory
+      dockerfile: inventory.Dockerfile
+    image: bradleyyeo/inventory:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/inventory
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5000:5000"
