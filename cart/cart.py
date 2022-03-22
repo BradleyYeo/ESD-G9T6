@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import environ
 
+# from cart_model.py import Cart, db
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -44,7 +46,8 @@ def get_all():
                 "code": 200,
                 "data": {
                     "carts": [cart.json() for cart in cartlist]
-                }
+                },
+                "message": "Cart items retrieved."
             }
         )
     return jsonify(
@@ -84,6 +87,8 @@ def add_to_cart():
     data = request.get_json()
     cart = Cart(cart_id=cart_id, customer_id=data['customer_id'], product_id=data['product_id'],
                 product_name=data['product_name'], price=data['price'], quantity=data['quantity'])
+    #if item is already in cart
+
 
     try:
         db.session.add(cart)

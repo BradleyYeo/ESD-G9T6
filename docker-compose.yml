@@ -33,31 +33,31 @@ services:
   ####################################
   # RabbitMQ: The messaging broker   
   ####################################
-  rabbitmq:
-    image: rabbitmq:3-management
-    hostname: esd-rabbit
-    restart: always
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    volumes: 
-      - rabbitmq_data:/var/lib/rabbitmq
+  # rabbitmq:
+  #   image: rabbitmq:3-management
+  #   hostname: esd-rabbit
+  #   restart: always
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   volumes: 
+  #     - rabbitmq_data:/var/lib/rabbitmq
       
   #################################################
   # Notification: The Notification microservice
   #################################################
-  notification:
-    build:
-      context: ./notification
-      dockerfile: notification.Dockerfile
-    image: tame123/notification:1.0
-    restart: always
-    depends_on:
-      - rabbitmq
-    environment:
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
-      PYTHONUNBUFFERED: 1
+  # notification:
+  #   build:
+  #     context: ./notification
+  #     dockerfile: notification.Dockerfile
+  #   image: tame123/notification:1.0
+  #   restart: always
+  #   depends_on:
+  #     - rabbitmq
+  #   environment:
+  #     rabbit_host: rabbitmq
+  #     rabbit_port: 5672
+  #     PYTHONUNBUFFERED: 1
 
   ###################################
   # Error: The Error microservice
@@ -118,16 +118,17 @@ services:
   ##################################
   # WIP
   ##################################
-  # cart:
-  #   build:
-  #     context: ./checkout
-  #     dockerfile: cart.Dockerfile
-  #   image: tame123/cart:1.3
-  #   restart: always
-  #   environment:
-  #     PYTHONUNBUFFERED: 1
-  #   # ports:
-  #   #   - "5551:5551"
+  cart:
+    build:
+      context: ./cart
+      dockerfile: cart.Dockerfile
+    image: bellekwang/cart:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/cart
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5000:5000"
       
 
   # inventory:
