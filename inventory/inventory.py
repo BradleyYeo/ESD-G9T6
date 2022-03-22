@@ -2,16 +2,34 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 from os import environ
-
-from models import InventoryModel, db
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+db = SQLAlchemy()
 CORS(app)
 
+class InventoryModel(db.Model):
+    __tablename__ = "inventory"
+
+    product_id = db.Column(db.Integer, primary_key=True)
+    product_name = db.Column(db.String())
+    quantity = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, id, product_name, quantity, price):
+        self.product_id = id
+        self.product_name = product_name
+        self.quantity = quantity
+        self.price = price
+
+    def json(self):
+        return {"product_id": self.product_id,
+                "product_name": self.product_name,
+                "quantity": self.quantity,
+                "price": self.price}
 
 class NotEnoughStock(Exception):
     """Not enough stock"""
