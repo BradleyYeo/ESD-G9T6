@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+
+  #################################
+  # Cart: The Book microservice
+  #################################
+  book:
+    build:
+      context: ./cart
+      dockerfile: Dockerfile
+    image: tame123/cart:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/book
+
+  ###############################################
+  # Checkout: The test_invoke_http.py program
+  ###############################################
+  checkout:
+    build:
+      context: ./checkout
+      dockerfile: Dockerfile
+    image: tame123/checkout:1.0
+    depends_on:
+      - book
+    environment:
+      bookURL: http://book:5000/book
