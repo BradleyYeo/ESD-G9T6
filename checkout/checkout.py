@@ -8,30 +8,28 @@ from os import environ
 import requests
 from invokes import invoke_http
 
-import amqp_setup
-import pika
+# import amqp_setup
+# import pika
 import json
 
 app = Flask(__name__)
 CORS(app)
 
-# to change the URL
-
-inventory_URL = environ.get('inventory_URL') or  "http://localhost:5552/inventory"
-cart_URL = environ.get('cart_URL') or "http://localhost:5551/cart"
-
-payment_URL = environ.get('payment_URL') or "http://localhost:5553/payment"
-
-# order_URL = environ.get('order_URL') or "http://localhost:5001/order"
-# shipping_record_URL = environ.get('shipping_record_URL') or "http://localhost:5002/shipping_record"
+inventory_URL = environ.get('inventory_URL') or  "http://inventory_placeholder:5552/inventory"
+cart_URL = environ.get('cart_URL') or "http://cart_placeholder:5000/cart"
+# payment_URL = environ.get('payment_URL') or "http://payment_placeholder:5553/payment"
 
 
-@app.route("/checkout/<string:customer_id>", methods=['POST'])
-def checkout(customer_id):
+
+@app.route("/checkout", methods=['POST'])
+def checkout():
     try:
         user_info = request.get_json()
+        customer_email = user_info["customer_email"]
+        customer_id = user_info["customer_id"]
         print("\nReceived a checkout request with customer_id: ", customer_id)
-        result = process_checkout(customer_id, user_info["customer_email"])
+
+        result = process_checkout(customer_id, customer_email)
         print('\n------------------------')
         print('\nresult: ', result)
         return jsonify(result), result["code"]
@@ -58,68 +56,87 @@ def checkout(customer_id):
 
 def process_checkout(customer_id, customer_email):
 
-    print('\n-----Invoking cart microservice-----')
-    # customer_cart = invoke_http("http://localhost:5551/cart/100", method='GET', json={})
-    cart_response = invoke_http(url = cart_URL + "/" + customer_id, method='GET', json=None)
+    print("\n-----Invoking cart microservice-----")
+    print("Getting customer's cart with their ID")
+    cart_response = invoke_http(url = cart_URL + "/" + str(customer_id), method='GET', json=None)
 
     code = cart_response["code"]
     if code not in range(200, 300):
-        """unexpected error from cart"""
-        print("unexpected error from cart")
+        print("Unexpected error from cart, exiting")
         return {"code": code, "message": str(cart_response)}
 
+    print("Reterival of cart items success")
     cart_items = cart_response["data"]["cart_items"]
+
     print('\n-----Invoking inventory microservice-----')
-    # inventory_response = invoke_http(inventory_URL, method='PUT', json={"cart": []})
+    print("Removing qty from inventory with customer's cart")
     inventory_response = invoke_http(inventory_URL, method='PUT', json={"cart": cart_items})
 
     code = inventory_response["code"]
-    if code not in range(200, 300):
-        print("inventory return error")
-        # return {"code": code, "message": str(inventory_response)}
-        if code == 400 and inventory_response["message"] == "not enough stock":
+    ##################################################################################################
+    if code not in range(200, 300): #NOT TESTED YET, WIP
+        print("Inventory returned error")
+        if code == 400 and inventory_response["message"].lower() == "not enough stock":
+            print("Not enough stock in inventory")
             """To update the cart and user afterwards"""
             max_stock = inventory_response["data"]["cart_items"]
-            cart_response = invoke_http(url = cart_URL + "/" + customer_id, method='PUT', json=max_stock)
+            cart_response = invoke_http(url = cart_URL + "/" + str(customer_id), method='PUT', json=max_stock)
             return {"code": code, "message": str(inventory_response)}
         else:
-            """unexpected error from inventory"""
-            print("unexpected error from inventory")
+            print("Unexpected error from inventory, exiting")
             return {"code": code, "message": str(inventory_response)}
-    
-    if inventory_response["message"] == "success":
-        """inventory check success, to continue on with payment then publish and remove from cart"""
-        payment_method()
+    ##################################################################################################
+
+    elif inventory_response["message"].lower() == "success":
+        print("Inventory check success")
+        ##################################################################################################
+        # print("\n-----Invoking payment microservice-----") #WIP
+        # payment_method()
+        ##################################################################################################
+        print("\n-----Publishing receipt to message broker-----")
         publish_receipt(customer_id, customer_email, cart_items)
-        cart_response = invoke_http(url = cart_URL + "/remove_all/" + customer_id, method='PUT', json=None)
-        if cart_response["code"] not in range(200, 300):
-            """unexpected error from cart"""
-            print("unexpected error from cart")
+
+        print("\n-----Invoking cart microservice-----")
+        print("Removing customer's cart with their ID")
+        cart_response = invoke_http(url = cart_URL + "/remove_all/" + str(customer_id), method='PUT', json=None)
+        
+        code = cart_response["code"]
+        if code not in range(200, 300):
+            print("Unexpected error from cart, exiting")
             return {"code": code, "message": str(cart_response)}
         
-        else:
-            """everything is successful"""
-            return {"code": code, "message": "success"}
+        print("Everything is successful")
+        return {"code": code, "message": "success"}
 
 
 
-def payment_method():
-    payment_response = invoke_http(url=payment_URL, method='POST', json=None)
-    if payment_response["code"] not in range(200, 300):
-        """unexpected error from payment"""
-        print("unexpected error from payment")
-    return {"code": payment_response["code"], "message": str(payment_response)}
+# def payment_method():
+#     payment_response = invoke_http(url=payment_URL, method='POST', json=None)
+#     if payment_response["code"] not in range(200, 300):
+#         """unexpected error from payment"""
+#         print("unexpected error from payment")
+#     return {"code": payment_response["code"], "message": str(payment_response)}
 
 
 def publish_receipt(customer_id, customer_email, cart_items):
-    amqp_setup.check_setup()
-    message = jsonify({
+    # amqp_setup.check_setup()
+    order_id = 2
+    total_price = 600
+    message = {
+        "created": "Wed, 16 Dec 2020 13:15:47 GMT",         ### WIP
         "customer_id": customer_id,
         "customer_email": customer_email,
-        "cart_items": cart_items
-    })
-    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="",
-                                         body=message, properties=pika.BasicProperties(delivery_mode=2))
+        "order_id": order_id,                               ### WIP
+        "order_item": cart_items,
+        "total_price": total_price                          ### WIP
+    }
+    print(str(message))
+    message = jsonify(message)
+    # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="",
+    #                                      body=message, properties=pika.BasicProperties(delivery_mode=2))
+
+
+
 
 
     # message = json.dumps(order_result) 
