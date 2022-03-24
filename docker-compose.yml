@@ -34,32 +34,32 @@ services:
   # RabbitMQ: The messaging broker   
   # Completed
   ####################################
-  # rabbitmq:
-  #   image: rabbitmq:3-management
-  #   hostname: esd-rabbit
-  #   restart: always
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672"
-  #   volumes: 
-  #     - rabbitmq_data:/var/lib/rabbitmq
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: esd-rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes: 
+      - rabbitmq_data:/var/lib/rabbitmq
       
   #################################################
   # Notification: The Notification microservice
   # Completed
   #################################################
-  # notification:
-  #   build:
-  #     context: ./notification
-  #     dockerfile: notification.Dockerfile
-  #   image: tame123/notification:1.0
-  #   restart: always
-  #   depends_on:
-  #     - rabbitmq
-  #   environment:
-  #     rabbit_host: rabbitmq
-  #     rabbit_port: 5672
-  #     PYTHONUNBUFFERED: 1
+  notification:
+    build:
+      context: ./notification
+      dockerfile: notification.Dockerfile
+    image: tame123/notification:1.0
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
 
   ###################################
   # Error: The Error microservice
@@ -149,12 +149,12 @@ services:
       - cart_placeholder
       - inventory_placeholder
       # - payment
-      # - rabbitmq
+      - rabbitmq
       # - order_history
-      # - notification
+      - notification
     environment:
-    #   rabbit_host: rabbitmq
-    #   rabbit_port: 5672
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
       inventory_URL: http://inventory_placeholder:5552/inventory
       cart_URL: http://cart_placeholder:5000/cart
       PYTHONUNBUFFERED: 1

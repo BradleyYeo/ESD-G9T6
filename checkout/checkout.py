@@ -8,8 +8,8 @@ from os import environ
 import requests
 from invokes import invoke_http
 
-# import amqp_setup
-# import pika
+import amqp_setup
+import pika
 import json
 
 app = Flask(__name__)
@@ -119,7 +119,7 @@ def process_checkout(customer_id, customer_email):
 
 
 def publish_receipt(customer_id, customer_email, cart_items):
-    # amqp_setup.check_setup()
+    amqp_setup.check_setup()
     order_id = 2
     total_price = 600
     message = {
@@ -132,8 +132,10 @@ def publish_receipt(customer_id, customer_email, cart_items):
     }
     print(str(message))
     message = jsonify(message)
-    # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="",
+    # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="#",
     #                                      body=message, properties=pika.BasicProperties(delivery_mode=2))
+    # this line above breaks it
+    # somehow notification is also broken
 
 
 
