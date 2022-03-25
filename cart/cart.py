@@ -87,8 +87,7 @@ def add_to_cart():
     data = request.get_json()
     cart = Cart(cart_id=cart_id, customer_id=data['customer_id'], product_id=data['product_id'],
                 product_name=data['product_name'], price=data['price'], quantity=data['quantity'])
-    #if item is already in cart
-
+    # if item is already in cart
 
     try:
         db.session.add(cart)

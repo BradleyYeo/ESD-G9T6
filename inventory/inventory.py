@@ -4,7 +4,8 @@ from flask_cors import CORS
 from os import environ
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or "mysql+mysqlconnector://root:root@localhost:8889/inventory"
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get(
+    'dbURL') or "mysql+mysqlconnector://root:root@localhost:8889/inventory"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy()
@@ -41,7 +42,7 @@ class NotEnoughStock(Exception):
 @app.route('/inventory/all')
 def get_all():
     inventory = InventoryModel.query.all()
-    if len(inventory): # 1 and above is true in python
+    if len(inventory):  # 1 and above is true in python
         return jsonify(
             {
                 "code": 200,
@@ -57,38 +58,46 @@ def get_all():
             "message": "There is no inventory recorded in the database"
         }
     ), 500
-    # return render_template('datalist.html', inventory=inventory)
 
 
-# @app.route('/inventory/', methods=['PUT'])
-# def update_inventory():
-#     data = request.get_json()
-#     product = InventoryModel.query.filter_by(product_id=data["product_id"]).first()
-#     try:
-#         new_quantity = int(data['quantity'])
-#         if product.quantity < new_quantity:
-#             raise NotEnoughStock
-#         else:
-#             product.quantity = new_quantity
-#             db.session.commit()
-#             return jsonify(
-#                 {
-#                     "code": 200,
-#                     "data": {},
-#                     "message": "Success"
-#                 }
-#             ), 200
-#
-#     except NotEnoughStock:
-#         return jsonify(
-#             {
-#                 "code": 400,
-#                 "data": {
-#                     "items": [product]
-#                 },
-#                 "message": "Not enough stock"
-#             }
-#         )
+@app.route('/inventory/update', methods=['PUT'])
+def update_inventory():
+    data = request.get_json()
+    # check for existing item in inventory
+    product = InventoryModel.query.filter_by(product_id=data["product_id"]).first()
+    if not product:
+        return jsonify(
+            {
+                "code": 404,
+                "data": {},
+                "message": "ItemID is invalid or does not exist."
+            }
+        ), 404
+    try:
+        new_quantity = int(data['quantity'])
+        if new_quantity > product.quantity:
+            raise NotEnoughStock
+        else:
+            product.quantity -= new_quantity
+            db.session.commit()
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": data,
+                    "message": "Inventory updated."
+                }
+            ), 200
+
+    except NotEnoughStock:
+        return jsonify(
+            {
+                "code": 400,
+                "data": {
+                    "items": new_quantity
+                },
+                "message": "Not enough stock"
+            }
+        )
 
 
 if __name__ == "__main__":

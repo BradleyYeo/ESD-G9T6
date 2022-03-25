@@ -1,0 +1,14 @@
+{
+   "cart": [ {
+        "product_id": 1,
+        "product_name": "apple",
+        "quantity": 3,
+        "price": 300
+    },
+    {
+        "product_id": 2,
+        "product_name": "pear",
+        "quantity": 2,
+        "price": 300
+    }]
+}
