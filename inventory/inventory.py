@@ -64,29 +64,32 @@ def get_all():
 def update_inventory():
     data = request.get_json()
     # check for existing item in inventory
-    product = InventoryModel.query.filter_by(product_id=data["product_id"]).first()
-    if not product:
-        return jsonify(
-            {
-                "code": 404,
-                "data": {},
-                "message": "ItemID is invalid or does not exist."
-            }
-        ), 404
+    items = data["cart"]
+
     try:
-        new_quantity = int(data['quantity'])
-        if new_quantity > product.quantity:
-            raise NotEnoughStock
-        else:
-            product.quantity -= new_quantity
-            db.session.commit()
-            return jsonify(
-                {
-                    "code": 200,
-                    "data": data,
-                    "message": "Inventory updated."
-                }
-            ), 200
+        for item in items:
+            product = InventoryModel.query.filter_by(product_id=item["product_id"]).first()
+            if not product:
+                return jsonify(
+                    {
+                        "code": 404,
+                        "data": {},
+                        "message": "ItemID is invalid or does not exist."
+                    }
+                ), 404
+            new_quantity = int(item['quantity'])
+            if new_quantity > product.quantity:
+                raise NotEnoughStock
+            else:
+                product.quantity -= new_quantity
+                db.session.commit()
+                return jsonify(
+                    {
+                        "code": 200,
+                        "data": data,
+                        "message": "Inventory updated."
+                    }
+                ), 200
 
     except NotEnoughStock:
         return jsonify(
