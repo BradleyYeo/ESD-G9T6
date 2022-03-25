@@ -8,6 +8,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or "mysql+mysqlconn
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy()
+db.init_app(app)
 CORS(app)
 
 
@@ -40,7 +41,7 @@ class NotEnoughStock(Exception):
 @app.route('/inventory/all')
 def get_all():
     inventory = InventoryModel.query.all()
-    if len(inventory):
+    if len(inventory): # 1 and above is true in python
         return jsonify(
             {
                 "code": 200,
@@ -53,42 +54,41 @@ def get_all():
     return jsonify(
         {
             "code": 500,
-            "data": {},
             "message": "There is no inventory recorded in the database"
         }
-    )
+    ), 500
     # return render_template('datalist.html', inventory=inventory)
 
 
-@app.route('/inventory/', methods=['PUT'])
-def update_inventory():
-    data = request.get_json()
-    product = InventoryModel.query.filter_by(product_id=data["product_id"]).first()
-    try:
-        new_quantity = int(data['quantity'])
-        if product.quantity < new_quantity:
-            raise NotEnoughStock
-        else:
-            product.quantity = new_quantity
-            db.session.commit()
-            return jsonify(
-                {
-                    "code": 200,
-                    "data": {},
-                    "message": "Success"
-                }
-            ), 200
-
-    except NotEnoughStock:
-        return jsonify(
-            {
-                "code": 400,
-                "data": {
-                    "items": [product]
-                },
-                "message": "Not enough stock"
-            }
-        )
+# @app.route('/inventory/', methods=['PUT'])
+# def update_inventory():
+#     data = request.get_json()
+#     product = InventoryModel.query.filter_by(product_id=data["product_id"]).first()
+#     try:
+#         new_quantity = int(data['quantity'])
+#         if product.quantity < new_quantity:
+#             raise NotEnoughStock
+#         else:
+#             product.quantity = new_quantity
+#             db.session.commit()
+#             return jsonify(
+#                 {
+#                     "code": 200,
+#                     "data": {},
+#                     "message": "Success"
+#                 }
+#             ), 200
+#
+#     except NotEnoughStock:
+#         return jsonify(
+#             {
+#                 "code": 400,
+#                 "data": {
+#                     "items": [product]
+#                 },
+#                 "message": "Not enough stock"
+#             }
+#         )
 
 
 if __name__ == "__main__":
