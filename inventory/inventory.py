@@ -96,7 +96,7 @@ def update_inventory():
             {
                 "code": 400,
                 "data": {
-                    "items": new_quantity
+                    "items": items
                 },
                 "message": "Not enough stock"
             }
