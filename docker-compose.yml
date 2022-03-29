@@ -132,7 +132,20 @@ services:
   #   ports:
   #     - "5000:5000"
       
-
+##################################
+  # WIP
+  ##################################
+  # order_history:
+  #   build:
+  #     context: ./order_history
+  #     dockerfile: order_history.Dockerfile
+  #   image: celestelxt/order_history:1.0
+  #   restart: always
+  #   environment:
+  #     dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/order_history
+  #     PYTHONUNBUFFERED: 1
+  #   ports:
+  #     - "5001:5001"
 
 
   # ###############################################
