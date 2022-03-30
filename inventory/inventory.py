@@ -104,4 +104,4 @@ def update_inventory():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5552, debug=True)
+    app.run(host="0.0.0.0", port=5552, debug=True) # right number for docker compose
