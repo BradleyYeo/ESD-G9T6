@@ -12,4 +12,4 @@ services:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:8889/inventory
       PYTHONUNBUFFERED: 1
     ports:
-      - "5000:5000"
+      - "5552:5552"
