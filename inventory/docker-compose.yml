@@ -4,8 +4,8 @@ services:
 
   inventory:
     build:
-      context: ./inventory
-      dockerfile: inventory.Dockerfile
+      context: .
+      dockerfile: Dockerfile
     image: bradleyyeo/inventory:1.0
     restart: always
     environment:
