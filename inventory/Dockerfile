@@ -1,8 +1,8 @@
-FROM python:3-slim
+FROM python:3.8-slim-buster
 WORKDIR /usr/src/app
 
 COPY inventory.reqs.txt ./
 RUN python -m pip install --no-cache-dir -r inventory.reqs.txt
-COPY ../inventory/inventory.py .
+COPY inventory.py .
 
-CMD ["python" , "./inventory.py"]
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
