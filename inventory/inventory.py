@@ -5,7 +5,7 @@ from os import environ
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get(
-    'dbURL')  or "mysql+mysqlconnector://root:root@localhost:8889/inventory"
+    'dbURL') or "mysql+mysqlconnector://root:root@localhost:8889/inventory"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy()
@@ -77,17 +77,29 @@ def update_inventory():
                         "message": "ItemID is invalid or does not exist."
                     }
                 ), 404
+
+            add = bool(item["add"])
             new_quantity = int(item['quantity'])
-            if new_quantity > product.quantity:
+            if add == False and new_quantity > product.quantity:
                 raise NotEnoughStock
-            else:
+            elif add == False and new_quantity <= product.quantity:
                 product.quantity -= new_quantity
                 db.session.commit()
                 return jsonify(
                     {
                         "code": 200,
                         "data": data,
-                        "message": "Inventory updated."
+                        "message": "Inventory decreased."
+                    }
+                ), 200
+            elif add:
+                product.quantity += new_quantity
+                db.session.commit()
+                return jsonify(
+                    {
+                        "code": 200,
+                        "data": data,
+                        "message": "Inventory increased."
                     }
                 ), 200
 
@@ -104,4 +116,4 @@ def update_inventory():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5552, debug=True) # right number for docker compose
+    app.run(host="0.0.0.0", port=5552, debug=True)  # right number for docker compose

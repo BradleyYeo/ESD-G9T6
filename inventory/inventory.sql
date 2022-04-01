@@ -44,9 +44,9 @@ INSERT INTO `inventory` (
         `quantity`,
         `price`
     )
-VALUES (1, 'apple', 2, 400),
-    (2, 'banana', 1, 300),
-    (3, 'pineapple', 2, 500);
+VALUES (1, 'apple', 2000, 400),
+    (2, 'banana', 1000, 300),
+    (3, 'pineapple', 2000, 500);
 COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */
 ;
