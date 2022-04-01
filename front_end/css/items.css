@@ -9,10 +9,27 @@ body {
 #hero {
     font-family: var(--fredoka);
     margin-bottom: 90px;
+    text-align: center;
 }
 
 #all-items .title{
     font-weight: 500;
     font-size: x-large;
     margin-bottom: 40px;
+}
+
+.item{
+    padding-top: 50px;
+}
+
+.button{
+    padding: 10px;
+    background-color: white;
+    border-radius: 15px;
+    border: none;
+    margin-top: 10px;
+}
+
+.button:hover{
+    background-color: rgb(180, 180, 222);
 }
