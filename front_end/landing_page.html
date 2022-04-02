@@ -90,7 +90,6 @@
             
         </div>
 
-        <hr>
 
         <div id="price">
             <div id="delivery-fee">
@@ -99,7 +98,7 @@
             </div>
             <div id="subtotal">
                 <div class="subtotal-text">Subtotal</div>
-                <div class="price-text">$3.50</div>
+                <!-- <div class="price-text">$3.50</div> -->
             </div>
         </div>
 
@@ -143,14 +142,14 @@
         </div>
         <div class="nav-right">
             <div class="nav-link" id="login-sign-up">LOGIN/SIGN UP</div>
-            <div class="cart-button" id="cart-button">CART (0)</div>
+            <div class="cart-button" id="cart-button">CART ( <span id="cart_num">0</span> )</div>
         </div>
     </nav>
 
     <div id="hero">
         <div id="header">
             <h1>FRESHEST GROCERIES<br>FOR YOU</h1>
-            <button href="">BUY NOW</button>
+            <a href="items.html">BUY NOW</a>
         </div>
         <div id="showcase-items">
             <p class="title">Freshest Groceries<p>
@@ -173,15 +172,25 @@
         });
         $("#modal-close").click(function(){
             $("#modal").hide(500);
+            $('#login-sign-up').text('Belle Kwang');
         });
         
 
 
         $("#cart-button").click(function(){
             $("#cart").show(500);
+            $('html, body').css({
+                overflow: 'hidden',
+                height: '100%'
+            });
+            
         });
         $(".close").click(function(){
             $("#cart").hide(500);
+            $('html, body').css({
+                overflow: 'auto',
+                height: 'auto'
+            });
         });
     </script>
 
@@ -199,24 +208,62 @@
                 );
                 const result = await response.json();
                     if (response.status === 200) {
-                    // success case
-                    var cart = result.data.cart; //the array is in books within data of 
-                                                // the returned result
-                    // for loop to setup all table rows with obtained book data
-                    var rows = "";
-                    for (const item of cart) {
-                        eachRow = "<div class='title'>"+ item.product_name + "</div>" +
-                                "<div class='details'>" + 
-                                    "<div class='quantity'>" + item.quantity + "</div>" + 
-                                    "<div class='price'>" + item.price + "</div>" + 
-                                "</div>"
-                        rows += "<div class='item'>" + eachRow + "</div>";
-                    }
+                        // success case
+                        var cart = result.data.cart; //the array is in books within data of 
+                                                    // the returned result
+                        // for loop to setup all table rows with obtained book data
+                        var total_price = 0;
+                        var cart_num = cart.length;
+                        var rows = "";
+                        for (const item of cart) {
+                            // eachRow = "<div class='title'>"+ item.product_name + "</div>" +
+                            //         "<div class='details'>" + 
+                            //             "<div class='quantity'>" + item.quantity + "</div>" + 
+                            //             "<div class='price'>" + item.price + "</div>" + 
+                            //         "</div>"
+                            item_price = (item.price)/100;
+                            item_price = item_price * item.quantity;
+                            item_price = item_price.toFixed(2);
+                            total_price = Number(total_price) + Number(item_price);
+                            each_row = `
+                                <div class='cart-img'>
+                                </div>
+                                <div class='cart-details'>
+                                    <div class='cd-title'>` + item.product_name +`</div>
+                                    <div class='cd-others'>
+                                        <div class='quantity'>Qty: ` + item.quantity + `</div>
+                                        <div class='price'>$` + item_price + `</div>
+                                    </div>
+                                </div>
+                            `;
+                            rows += "<div class='cart-item'>" + each_row + "</div>";
+                        }
                         // add all the rows to the table
                         $('#cart-items').append(rows);
-                    } else if (response.status == 404) {
+                        
+                        total_price = Number(total_price) + Number(3.50);
+                        var subtotal = `<div class="price-text">$`+ total_price.toFixed(2) +`</div>`;
+                        $('#subtotal').append(subtotal);
+
+                        $('#cart_num').text(cart_num);
+
+                        $('#cart-items').css({
+                            overflow: 'scroll'
+                        })
+                    } else if (response.status == 400) {
                         // No books
-                        showError(result.message);
+                        console.log(result.message);
+                        noItemsMsg = `<div id="no-cart-items">
+                            <div class="no-cart-items">Your Cart is Empty</div>
+                            <a class="no-cart-items-btn" href="items.html">Shop for More</a>
+                            </div>
+                            `;
+                        $('#cart-items').append(noItemsMsg);
+                        $('#price').hide();
+                        $('#checkout-button').hide();
+                        $('#cart-items').css({
+                            height: '40px'
+                        })
                     } else {
                         // unexpected outcome, throw the error
                         throw response.status;
@@ -224,8 +271,8 @@
                 } catch (error) {
                     // Errors when calling the service; such as network error, 
                     // service offline, etc
-                    showError
-        ('There is a problem retrieving books data, please try again later.<br />' + error);
+                    console.log
+        ('There is a problem retrieving cart data, please try again later.<br />' + error);
                 } // error
         });
     </script>
