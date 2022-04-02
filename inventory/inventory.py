@@ -77,11 +77,10 @@ def update_inventory():
                     }
                 ), 404
 
-            add = bool(item["add"])
             new_quantity = int(item['quantity'])
-            if add == False and new_quantity > product.quantity:
+            if new_quantity > product.quantity:
                 raise NotEnoughStock
-            elif add == False and new_quantity <= product.quantity:
+            elif new_quantity <= product.quantity:
                 product.quantity -= new_quantity
                 db.session.commit()
                 return jsonify(
@@ -89,16 +88,6 @@ def update_inventory():
                         "code": 200,
                         "data": data,
                         "message": "Inventory decreased."
-                    }
-                ), 200
-            elif add:
-                product.quantity += new_quantity
-                db.session.commit()
-                return jsonify(
-                    {
-                        "code": 200,
-                        "data": data,
-                        "message": "Inventory increased."
                     }
                 ), 200
 
