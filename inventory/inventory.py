@@ -95,7 +95,9 @@ def update_inventory():
         return jsonify(
             {
                 "code": 400,
-                "data": {
+                "product name": product.product_name,
+                "Quantity Available": product.quantity,
+                "initial cart qty": {
                     "items": items
                 },
                 "message": "Not enough stock"
