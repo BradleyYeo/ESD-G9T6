@@ -9,7 +9,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/inventory", methods=['PUT'])
+@app.route("/inventory/update", methods=['PUT'])
 def update_inventory_numbers():
     # Check if the order contains valid JSON
     order = None

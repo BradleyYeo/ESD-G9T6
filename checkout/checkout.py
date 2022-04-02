@@ -70,7 +70,7 @@ def process_checkout(customer_id, customer_email):
 
     print('\n-----Invoking inventory microservice-----')
     print("Removing qty from inventory with customer's cart")
-    inventory_response = invoke_http(inventory_URL, method='PUT', json={"cart": cart_items})
+    inventory_response = invoke_http(inventory_URL + "/update", method='PUT', json={"cart": cart_items})
 
     code = inventory_response["code"]
     ##################################################################################################
@@ -132,8 +132,8 @@ def publish_receipt(customer_id, customer_email, cart_items):
     }
     print(str(message))
     message = jsonify(message)
-    # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="#",
-    #                                      body=message, properties=pika.BasicProperties(delivery_mode=2))
+    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="#",
+                                         body=message, properties=pika.BasicProperties(delivery_mode=2))
     # this line above breaks it
     # somehow notification is also broken
 

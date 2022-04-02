@@ -23,8 +23,8 @@ channel = connection.channel()
 ############ Order Tracking exchange #############
 # Set up the exchange if the exchange doesn't exist
 exchangename = "order_tracking"
-channel.exchange_declare(exchange=exchangename, exchange_type="fanout", durable=True)
-
+exchangetype = "fanout"
+channel.exchange_declare(exchange=exchangename, exchange_type=exchangetype, durable=True)
 
 ############   Order History queue   #############
 queue_name = 'order_history'
