@@ -131,13 +131,9 @@ def publish_receipt(customer_id, customer_email, cart_items):
         "total_price": total_price                          ### WIP
     }
     print(str(message))
-    message = jsonify(message)
+    message = json.dumps(message)
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="#",
                                          body=message, properties=pika.BasicProperties(delivery_mode=2))
-    # this line above breaks it
-    # somehow notification is also broken
-
-
 
 
 
