@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+
+  payment:
+    build:
+      context: ./
+      dockerfile: payment.Dockerfile
+    image: blazefire710/payment:1.0
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5000:5069"

@@ -26,8 +26,11 @@ def checkout():
 ##################stripe checkout payment session for payment details############
 @app.route('/charge', methods=['POST'])
 def charge():
-    # Amount in cents
-    amount = 1000
+    # # check for total price sent by complex MS
+    # data = request.get_json()
+    # total_price = data["total_price"]
+
+    amount = 1000 # Amount in cents #currently hardcoded
 
     customer = stripe.Customer.create(
         email='customer@example.com',
@@ -89,6 +92,14 @@ def stripe_webhook():
                 "message": "Payment Successful"
             }
         )
+
+    return jsonify(
+        {
+            "code": 200,
+            "data": {},
+            "message": "Payment Successful"
+        }
+    )
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5069, debug=True)
