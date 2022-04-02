@@ -9,7 +9,7 @@ services:
     image: brad/inventory:1.0
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://root:@localhost:3306/inventory
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/inventory
       PYTHONUNBUFFERED: 1
     ports:
       - "5552:5552"
