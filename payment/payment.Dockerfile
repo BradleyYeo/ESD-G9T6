@@ -7,10 +7,10 @@ RUN python -m pip install --no-cache-dir -r payment.reqs.txt
 COPY payment.py ./
 COPY .env ./
 COPY stripe.exe .
+# COPY templates .
 
-# COPY templates . #this syntax doesn't work
-# COPY ./templates/charge.html ./templates #REALIZED THAT NEED THE / AT THE END OR ELSE IT DOESN'T COPY OVER into a separate folder
-# COPY ./templates/checkout.html ./templates #REALIZED THAT NEED THE / AT THE END OR ELSE IT DOESN'T COPY OVER into a separate folder
+# COPY ./templates/charge.html ./templates #REALIZED THAT NEED THE / AT THE END OR ELSE IT DOESN'T COPY OVER PROPERLY
+# COPY ./templates/checkout.html ./templates #REALIZED THAT NEED THE / AT THE END OR ELSE IT DOESN'T COPY OVER PROPERLY
 COPY ./templates/charge.html ./templates/
 COPY ./templates/checkout.html ./templates/
 

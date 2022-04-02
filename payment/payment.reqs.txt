@@ -1,0 +1,5 @@
+Flask==2.0.2
+Flask-Cors==3.0.10
+Jinja2==3.0.3
+python-dotenv==0.19.2
+stripe==2.67.0

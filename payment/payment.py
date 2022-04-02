@@ -1,6 +1,7 @@
 # flask server that renders the checkout.html file we created in the templates directory of the root folder.
 from multiprocessing.sharedctypes import Value
 from flask import Flask, render_template, request, jsonify
+import requests
 import os
 import stripe
 from dotenv import load_dotenv #this is to load the environment variables from the .env file!
@@ -17,7 +18,8 @@ stripe_keys = {
 stripe.api_key = stripe_keys["secret_key"]
 
 #############homepage where checkout button is shown#############
-@app.route('/')
+# @app.route('/') #original
+@app.route('/payment')
 def checkout():
     return render_template('checkout.html',key=stripe_keys['publishable_key'])
 
@@ -36,7 +38,7 @@ def charge():
         customer=customer.id,
         amount=amount,
         currency='sgd',
-        description='Flask Charge'
+        description='Bluemart Purchase'
     )
 
     # redirects user to the payment success page

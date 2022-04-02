@@ -1,0 +1,4 @@
+- stripe.exe is the webhook command line app that must be run for the payment MS to track when a payment has been received successfully
+- charge.html is a page template that is shown after user has made payment
+- checkout.html is a page template that is shown for user to click on the button to make payment
+- .env holds the API keys and webhook keys which will be retrieved from inside payment.py for authentication
