@@ -5,11 +5,10 @@ from os import environ
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get(
-    'dbURL') or "mysql+mysqlconnector://root:root@localhost:8889/inventory"
+    'dbURL') or "mysql+mysqlconnector://root:@localhost:3306/inventory"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy()
-db.init_app(app)
+db = SQLAlchemy(app)
 CORS(app)
 
 
