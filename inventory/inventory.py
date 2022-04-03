@@ -82,7 +82,7 @@ def reduce_inventory():
 
         new_quantity = int(item['quantity'])
 
-        if new_quantity >= product.quantity:
+        if new_quantity > product.quantity:
             has_stock = False
             item["max_stock"] = product.quantity
             new_cart.append(item)

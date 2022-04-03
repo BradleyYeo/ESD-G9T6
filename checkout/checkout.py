@@ -64,9 +64,9 @@ def process_checkout(customer_id, customer_email):
     if code not in range(200, 300):
         if code == 404 and cart_response["message"].lower() == "cart is empty.":
             return {"code": code, "message": "Cart is empty."}
-    else:
-        print("Unexpected error from cart, exiting")
-        return {"code": code, "message": str(cart_response)}
+        else:
+            print("Unexpected error from cart, exiting")
+            return {"code": code, "message": str(cart_response)}
 
     print("Reterival of cart items success")
     cart_items = cart_response["data"]["cart"]
@@ -77,22 +77,24 @@ def process_checkout(customer_id, customer_email):
 
     code = inventory_response["code"]
     print(str(inventory_response))
-    ##################################################################################################
-    if code not in range(200, 300):  # WIP
+    
+    if code not in range(200, 300):
         print("Inventory returned error")
         if code == 500 and inventory_response["message"].lower() == "not enough stock.":
             print("Not enough stock in inventory")
             """To update the cart and user afterwards"""
             new_cart = inventory_response["data"]["cart"]
+
             print("invoke cart with new stock")
-            # print(new_cart)
-            ## TO DO
-            #  cart_response = invoke_http(url=cart_URL + "/" + str(customer_id), method='PUT', json=max_stock)
-            return {"code": code, "data": new_cart, "message": "Not enough stock."}
+            cart_response = invoke_http(url=cart_URL + "/update/" + str(customer_id), method='PUT', json=new_cart)
+            if cart_response["code"] == 200 and cart_response["message"].lower() == "cart updated.":
+                return {"code": code, "data": new_cart, "message": "Not enough stock, cart updated to max stock"}
+            else:
+                return {"code": code, "data": new_cart, "message": "Not enough stock, cart unexpectedly failed to update to max stock"}
         else:
             print("Unexpected error from inventory, exiting")
             return {"code": code, "message": str(inventory_response)}
-    ##################################################################################################
+    
 
     elif inventory_response["message"].lower() == "inventory decreased.":
         print("Inventory check success")

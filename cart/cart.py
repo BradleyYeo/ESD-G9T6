@@ -145,25 +145,27 @@ def remove_all(customer_id):
             }
         ), 500
 
-
-# UPDATE QUANTITY OF ONE ITEM IN CUSTOMER'S CART
-@app.route("/cart/update", methods=["PUT"])
-def update_cart():
+# UPDATE QUANTITY OF MANY ITEM IN CUSTOMER'S CART
+@app.route("/cart/update/<int:customer_id>", methods=["PUT"])
+def update_cart(customer_id):
     data = request.get_json()
     # check for existing item in cart
-    item = Cart.query.filter_by(customer_id=data['customer_id'], product_id=data['product_id']).first()
-    if not item:
-        return jsonify(
-            {
-                "code": 404,
-                "data": {},
-                "message": "Item not in cart."
-            }
-        ), 404
-
+    for item in data:
+        db_item = Cart.query.filter_by(customer_id=customer_id, product_id=item['product_id']).first()
+        if not db_item:
+            return jsonify(
+                {
+                    "code": 404,
+                    "data": {},
+                    "message": "Item not in cart."
+                }
+            ), 404
+        if item['max_stock'] == 0:
+            db.session.delete(db_item)
+        else:
+            new_quantity = int(item['max_stock'])
+            db_item.quantity = new_quantity
     try:
-        new_quantity = int(data['quantity'])
-        item.quantity = new_quantity
         db.session.commit()
         return jsonify(
             {
