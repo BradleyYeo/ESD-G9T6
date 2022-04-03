@@ -14,8 +14,8 @@ from invokes import invoke_http
 app = Flask(__name__)
 CORS(app)
 
-inventory_URL = environ.get('inventory_URL') or "http://inventory_placeholder:5552/inventory"
-cart_URL = environ.get('cart_URL') or "http://cart_placeholder:5000/cart"
+inventory_URL = environ.get('inventory_URL') or "http://inventory:5552/inventory"
+cart_URL = environ.get('cart_URL') or "http://cart:5000/cart"
 
 
 # payment_URL = environ.get('payment_URL') or "http://payment_placeholder:5553/payment"

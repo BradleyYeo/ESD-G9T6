@@ -56,17 +56,17 @@ services:
   ##################################
   # WIP
   ##################################
-  # cart:
-  #   build:
-  #     context: ./cart
-  #     dockerfile: cart.Dockerfile
-  #   image: bellekwang/cart:1.0
-  #   restart: always
-  #   environment:
-  #     dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/cart
-  #     PYTHONUNBUFFERED: 1
-  #   ports:
-  #     - "5000:5000"
+  cart:
+    build:
+      context: ./cart
+      dockerfile: cart.Dockerfile
+    image: bellekwang/cart:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/cart
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5000:5000"
       
   #################################################
   # Order_history: The Order_history microservice
@@ -114,7 +114,7 @@ services:
     image: tame123/checkout:1.0
     restart: always
     depends_on:
-      - cart_placeholder        #to connect to real cart
+      - cart
       - inventory
       # - payment               #to connect to payment
       - rabbitmq
@@ -125,7 +125,7 @@ services:
       rabbit_host: rabbitmq
       rabbit_port: 5672
       inventory_URL: http://inventory:5552/inventory
-      cart_URL: http://cart_placeholder:5000/cart      #placeholder URL
+      cart_URL: http://cart:5000/cart
       PYTHONUNBUFFERED: 1
     ports:
       - "5550:5550"
@@ -142,15 +142,16 @@ services:
   #   restart: always
   #   environment:
   #     PYTHONUNBUFFERED: 1
-
-  cart_placeholder:
-    build:
-      context: ./checkout
-      dockerfile: cart.Dockerfile
-    image: tame123/cart:1.0
-    restart: always
-    environment:
-      PYTHONUNBUFFERED: 1
+  
+  # NOT IN USED ANYMORE
+  # cart_placeholder:
+  #   build:
+  #     context: ./checkout
+  #     dockerfile: cart.Dockerfile
+  #   image: tame123/cart:1.0
+  #   restart: always
+  #   environment:
+  #     PYTHONUNBUFFERED: 1
 
   ###################################
   # Payment: The Payment microservice
