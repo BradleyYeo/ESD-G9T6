@@ -146,12 +146,23 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/order_history
       PYTHONUNBUFFERED: 1
-      rabbit_host: rabbitmq
-      rabbit_port: 5672
     ports:
       - "5001:5001"
 
-
+  order_history_wrapper:
+    build:
+      context: ./order_history/wrapper
+      dockerfile: order_history_wrapper.Dockerfile
+    image: tame123/order_history_wrapper:1.0
+    restart: always
+    depends_on:
+      - rabbitmq
+      - order_history
+    environment:
+      order_history_URL: http://order_history:5001/order_history
+      PYTHONUNBUFFERED: 1
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
 
   # ###############################################
   # # WIP
