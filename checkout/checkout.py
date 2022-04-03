@@ -2,6 +2,8 @@ import json
 import os
 from os import environ
 
+from datetime import datetime
+
 import pika
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -63,33 +65,37 @@ def process_checkout(customer_id, customer_email):
         return {"code": code, "message": str(cart_response)}
 
     print("Reterival of cart items success")
-    cart_items = cart_response["data"]["cart_items"]
+    cart_items = cart_response["data"]["cart"]
 
     print('\n-----Invoking inventory microservice-----')
     print("Removing qty from inventory with customer's cart")
-    inventory_response = invoke_http(inventory_URL + "/update", method='PUT', json={"cart": cart_items})
+    inventory_response = invoke_http(inventory_URL + "/reduce", method='PUT', json={"cart": cart_items})
 
     code = inventory_response["code"]
+    print(str(inventory_response))
     ##################################################################################################
-    if code not in range(200, 300):  # NOT TESTED YET, WIP
+    if code not in range(200, 300):  # WIP
         print("Inventory returned error")
-        if code == 400 and inventory_response["message"].lower() == "not enough stock":
+        if code == 500 and inventory_response["message"].lower() == "not enough stock.":
             print("Not enough stock in inventory")
             """To update the cart and user afterwards"""
-            max_stock = inventory_response["data"]["cart_items"]
-            cart_response = invoke_http(url=cart_URL + "/" + str(customer_id), method='PUT', json=max_stock)
-            return {"code": code, "message": str(inventory_response)}
+            new_cart = inventory_response["data"]["cart"]
+            print("invoke cart with new stock")
+            # print(new_cart)
+            ## TO DO
+            #  cart_response = invoke_http(url=cart_URL + "/" + str(customer_id), method='PUT', json=max_stock)
+            return {"code": code, "data": new_cart, "message": "Not enough stock."}
         else:
             print("Unexpected error from inventory, exiting")
             return {"code": code, "message": str(inventory_response)}
     ##################################################################################################
 
-    elif inventory_response["message"].lower() == "success":
+    elif inventory_response["message"].lower() == "inventory decreased.":
         print("Inventory check success")
-        ##################################################################################################
-        # print("\n-----Invoking payment microservice-----") #WIP
-        # payment_method()
-        ##################################################################################################
+    #     ##################################################################################################
+    #     # print("\n-----Invoking payment microservice-----") #WIP
+    #     # payment_method()
+    #     ##################################################################################################
         print("\n-----Publishing receipt to message broker-----")
         publish_receipt(customer_id, customer_email, cart_items)
 
@@ -117,19 +123,29 @@ def process_checkout(customer_id, customer_email):
 def publish_receipt(customer_id, customer_email, cart_items):
     amqp_setup.check_setup()
     order_id = 2
-    total_price = 600
+    total_price = calcalate_total_price(cart_items)
     message = {
-        "created": "Wed, 16 Dec 2020 13:15:47 GMT",  ### WIP
+        "created": str(datetime.now()),
         "customer_id": customer_id,
         "customer_email": customer_email,
-        "order_id": order_id,  ### WIP
+        "order_id": order_id,  ### WIP #append customer id and time stamp 
         "order_item": cart_items,
-        "total_price": total_price  ### WIP
+        "total_price": total_price
     }
     print(str(message))
     message = json.dumps(message)
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="#",
                                      body=message, properties=pika.BasicProperties(delivery_mode=2))
+
+
+def calcalate_total_price(cart_items):
+    total_price = 0
+    for item in cart_items:
+        total_price += item["price"]
+    return total_price
+
+#########################END###############################
+
 
     # message = json.dumps(order_result)
     # amqp_setup.check_setup()

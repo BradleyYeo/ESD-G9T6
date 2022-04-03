@@ -4,31 +4,6 @@ volumes:
   rabbitmq_data:
 
 services:
- 
-  ###################################
-  # Order: The Order microservice
-  ###################################
-  # order:
-  #   build:
-  #     context: ./
-  #     dockerfile: order.inventory.Dockerfile
-  #   image: tame123/order:esd
-  #   restart: always
-  #   environment:
-  #     dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/order
-  #     PYTHONUNBUFFERED: 1
- 
-  #######################################################
-  # Shipping Record: The Shipping Record microservice
-  #######################################################
-  # shipping_record:
-  #   build:
-  #     context: ./
-  #     dockerfile: shipping_record.inventory.Dockerfile
-  #   image: tame123/shipping_record:esd
-  #   restart: always
-  #   environment:
-  #     PYTHONUNBUFFERED: 1
 
   ####################################
   # RabbitMQ: The messaging broker   
@@ -61,60 +36,21 @@ services:
       rabbit_port: 5672
       PYTHONUNBUFFERED: 1
 
-  ###################################
-  # Error: The Error microservice
-  ###################################
-  # error:
-  #   build:
-  #     context: ./
-  #     dockerfile: error.inventory.Dockerfile
-  #   image: tame123/error:esd
-  #   restart: always
-  #   depends_on:
-  #     - rabbitmq
-  #   environment:
-  #     rabbit_host: rabbitmq
-  #     rabbit_port: 5672
-  #     PYTHONUNBUFFERED: 1
-
-  ###############################################
-  # Place Order: The Place Order microservice
-  ###############################################
-  # place_order:
-  #   build:
-  #     context: ./
-  #     dockerfile: place_order.inventory.Dockerfile
-  #   image: tame123/place_order:esd
-  #   restart: always
-  #   depends_on:
-  #     - order
-  #     - shipping_record
-  #     - activity_log
-  #     - error
-  #     - rabbitmq
-  #   environment:
-  #     rabbit_host: rabbitmq
-  #     rabbit_port: 5672
-  #     order_URL: http://order:5001/order
-  #     shipping_record_URL: http://shipping_record:5002/shipping_record 
-  #     PYTHONUNBUFFERED: 1
-  #   ports:
-  #     - "5100:5100"
-
   ##################################
-  # Book: The Book microservice
+  # Inventory: The Inventory microservice
+  # Completed
   ##################################
-  # book:
-  #   build:
-  #     context: ./
-  #     dockerfile: book.inventory.Dockerfile
-  #   image: tame123/book:esd
-  #   restart: always
-  #   environment:
-  #     dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/book
-  #     PYTHONUNBUFFERED: 1
-  #   ports:
-  #     - "5000:5000"
+  inventory:
+    build:
+      context: ./inventory
+      dockerfile: inventory.Dockerfile
+    image: brad/inventory:1.0
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/inventory
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5552:5552"
 
 
   ##################################
@@ -179,7 +115,8 @@ services:
     restart: always
     depends_on:
       - cart_placeholder        #to connect to real cart
-      - inventory_placeholder   #to connect to real inventory
+      # - inventory_placeholder   #to connect to real inventory
+      - inventory
       # - payment               #to connect to payment
       - rabbitmq
       - order_history
@@ -188,7 +125,8 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      inventory_URL: http://inventory_placeholder:5552/inventory
+      # inventory_URL: http://inventory_placeholder:5552/inventory
+      inventory_URL: http://inventory:5552/inventory
       cart_URL: http://cart_placeholder:5000/cart
       PYTHONUNBUFFERED: 1
     ports:
@@ -197,14 +135,14 @@ services:
   # ###############################################
   # placeholder cart and inventory
   # ###############################################
-  inventory_placeholder:
-    build:
-      context: ./checkout
-      dockerfile: inventory.Dockerfile
-    image: tame123/inventory:1.0
-    restart: always
-    environment:
-      PYTHONUNBUFFERED: 1
+  # inventory_placeholder:
+  #   build:
+  #     context: ./checkout
+  #     dockerfile: inventory.Dockerfile
+  #   image: tame123/inventory:1.0
+  #   restart: always
+  #   environment:
+  #     PYTHONUNBUFFERED: 1
 
   cart_placeholder:
     build:

@@ -97,7 +97,7 @@ def reduce_inventory():
             return jsonify(
                 {
                     "code": 200,
-                    "data": data,
+                    "data": {},
                     "message": "Inventory decreased."
                 }
             ), 200
@@ -114,12 +114,14 @@ def reduce_inventory():
         return jsonify(
             {
                 "code": 500,
-                "data": new_cart,
-                "message": "not enough stock."
+                "data": {
+                    "cart": new_cart
+                },
+                "message": "Not enough stock."
             }
         ), 500
 
-
+#not tested with complex
 @app.route("/inventory/add", methods=["PUT"])
 def add_inventory():
     data = request.get_json()
