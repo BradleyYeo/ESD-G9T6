@@ -13,8 +13,9 @@ header("Access-Control-Allow-Origin: *");
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/items.css">
+    <link rel="stylesheet" href="css/landing_page.css">
     <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/modal.css">
 
     <!-- Latest compiled and minified JavaScript -->
     <script
@@ -32,26 +33,121 @@ header("Access-Control-Allow-Origin: *");
 </head>
 
 <body>
+    <!-- FOR FACEBOOK LOGIN -->
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId            : '936734707042298',
+                autoLogAppEvents : true,
+                xfbml            : true,
+                version          : 'v13.0'
+            });
+        };
+    </script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    
+    
+    <script>
+    
+        function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
+            console.log('statusChangeCallback');
+            console.log(response);                   // The current login status of the person.
+            if (response.status === 'connected') {   // Logged into your webpage and Facebook.
+                testAPI();
+            } else {                                 // Not logged into your webpage or we are unable to tell.
+                document.getElementById('status').innerHTML = 'Please log ' +
+                    'into this webpage.';
+            }
+        }
+    
+    
+        function checkLoginState() {               // Called when a person is finished with the Login Button.
+            FB.getLoginStatus(function(response) {   // See the onlogin handler
+                statusChangeCallback(response);
+            });
+        }
+    
+    
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '936734707042298',
+                cookie     : true,                     // Enable cookies to allow the server to access the session.
+                xfbml      : true,                     // Parse social plugins on this webpage.
+                version    : '13.0'           // Use this Graph API version for this call.
+            });
+    
+    
+            FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
+                statusChangeCallback(response);        // Returns the login status.
+            });
+        };
+    
+        function testAPI() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/me', function(response) {
+                console.log('Successful login for: ' + response.name);
+                document.getElementById('status').innerHTML =
+                    'Thanks for logging in, ' + response.name + '!';
+            });
+        }
+    
+    </script>
+    <!-- FOR FACEBOOK LOGIN END -->
+
     <!-- CART -->
     <div id="cart">
         <!-- MAKE SURE TO MAKE THE REST OF THE PAGE UNSCROLLABLE WHEN CART IS OPEN -->
         
         <div class="top-row">
-            <div class="close">close</div>
+            <img src="img/angle-left-solid.svg" alt="" class="close">
             <div id="title">CART</div>
         </div>
 
         <div id="cart-items">
-            <div id="added-items"></div>
+            
         </div>
+
 
         <div id="price">
-            <div id="delivery-fee"></div>
-            <div id="subtotal"></div>
+            <div id="delivery-fee">
+                <div class="text">Delivery Fee</div>
+                <div class="price-text">$3.50</div>
+            </div>
+            <div id="subtotal">
+                <div class="subtotal-text">Subtotal</div>
+                <!-- <div class="price-text">$3.50</div> -->
+            </div>
         </div>
 
-        <div id="checkout-button"></div>
+        <a id="checkout-button" onclick="checkout()" href="../payment/templates/checkout.html">
+            <img src="img/stripe-brands.svg" alt="">
+            Proceed to Checkout
+        </a>
     </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="modal">
+        <div id="modal-content">
+            <div class="top"><img src="img/xmark-solid.svg" id="modal-close"></div>   
+            <div class="title">Pardon the Interruption.</div>
+            <p>
+                We see that you're not logged in.<br>
+                There's so many groceries waiting to be<br>
+                added to your cart. Join us now!
+            </p>
+            <div class="facebook-login">
+                <div id="fb-root"></div>
+
+                <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0&appId=936734707042298&autoLogAppEvents=1" nonce="K1O1L8gJ"></script>
+
+                <div class="fb-login-button" data-width="250" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="true" data-use-continue-as="true"></div>
+
+                <div id="status">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="app">
     <nav>
         <div class="nav-left">
@@ -65,9 +161,6 @@ header("Access-Control-Allow-Origin: *");
             <a href="" class="nav-link">LOGIN/SIGN UP</a>
             <div class="cart-button" id="cart-button">
                 CART {{cartNum}}
-                <div v-if="haveCart">
-                    {{firstCartProductName}}
-                </div>
             </div>
         </div>
     </nav>
@@ -78,7 +171,7 @@ header("Access-Control-Allow-Origin: *");
             <div class="items" v-if="noError">
                 <div class="item" id="first-item">
                     <div>
-                        <img src ="images/1.webp" width="150" height="100"/>
+                        <img src ="img/1.webp" width="150" height="100"/>
                     </div>
                         <h3> Item: {{firstProductName}} </h3> 
                         <p> Price: {{firstPrice}} cents</p>
@@ -88,7 +181,7 @@ header("Access-Control-Allow-Origin: *");
                 </div>
                 <div class="item" id="second-item">
                     <div>
-                        <img src ="images/2.jpeg" width="150" height="100"/>
+                        <img src ="img/2.webp" width="150" height="100"/>
                     </div>
                         <h3> Item: {{secondProductName}} </h3> 
                         <p> Price: {{secondPrice}} cents</p>
@@ -98,7 +191,7 @@ header("Access-Control-Allow-Origin: *");
                 </div>
                 <div class="item" id="third-item">
                     <div>
-                        <img src ="images/3.webp" width="150" height="100"/>
+                        <img src ="img/3.webp" width="150" height="100"/>
                     </div>
                         <h3> Item: {{thirdProductName}} </h3> 
                         <p> Price: {{thirdPrice}} cents</p>
@@ -111,9 +204,6 @@ header("Access-Control-Allow-Origin: *");
         </div>
     </div> <!--end of vue div container-->
 
-    <div id="footer">
-
-    </div>
     </div>
 
     <script>
@@ -331,6 +421,45 @@ header("Access-Control-Allow-Origin: *");
                             }
                         })
                 },
+                // checkout(){
+                //     let jsonData = JSON.stringify({
+                //         "customer_id": 123456,
+                //         "customer_email": "abc@abc"
+                //     });
+
+                //     //for cart
+                //     fetch(`/checkout`,
+                //     {
+                //         method: "POST",
+                //         headers: {
+                //             "Content-type": "application/json"
+                //         },
+                //         body: jsonData
+                //     })
+                //     .then(response => response.json())
+                //     .then(data => {
+                //         console.log(data);
+                //         result = data.data;
+                //         console.log(result);
+                //         // 3 cases
+                //         switch (data.code) {
+                //             case 201:
+                //                 this.noError = true;
+                //                 // refresh inventory
+                //                 //this.getAllInventoryItems();
+
+                //                 // an alternate way is to add this one element into this.books
+                //                 break;
+                //             case 400:
+                //             case 500:
+                //                 this.noError = false;
+                //                 this.noError = data.message;
+                //                 break;
+                //             default:
+                //                 throw `${data.code}: ${data.message}`;
+                //         }
+                //     })
+                // },
                 // getAllCart(){
                 //     const response =
                 //         fetch(cart_URL)
@@ -407,24 +536,153 @@ header("Access-Control-Allow-Origin: *");
         const vm = app.mount('#app');
     </script>
 
- <script>
-
+    <script>
         $("#login-sign-up").click(function(){
             $("#modal").show(500);
         });
         $("#modal-close").click(function(){
             $("#modal").hide(500);
+            $('#login-sign-up').text('Belle Kwang');
         });
         
 
 
-        $(".cart-button").click(function(){
+        $("#cart-button").click(function(){
             $("#cart").show(500);
+            $('html, body').css({
+                overflow: 'hidden',
+                height: '100%'
+            });
+            
         });
         $(".close").click(function(){
             $("#cart").hide(500);
+            $('html, body').css({
+                overflow: 'auto',
+                height: 'auto'
+            });
         });
-</script>
+    </script>
+
+<script>
+        // anonymous async function 
+        // - using await requires the function that calls it to be async
+        $(async() => {           
+            // Change serviceURL to your own
+            var serviceURL = "http://127.0.0.1:5000/cart/2";
+
+            try {
+                const response =
+                    await fetch(
+                    serviceURL, { method: 'GET' }
+                );
+                const result = await response.json();
+                    if (response.status === 200) {
+                        // success case
+                        var cart = result.data.cart; //the array is in books within data of 
+                                                    // the returned result
+                        // for loop to setup all table rows with obtained book data
+                        var total_price = 0;
+                        var cart_num = cart.length;
+                        var rows = "";
+                        for (const item of cart) {
+                            // eachRow = "<div class='title'>"+ item.product_name + "</div>" +
+                            //         "<div class='details'>" + 
+                            //             "<div class='quantity'>" + item.quantity + "</div>" + 
+                            //             "<div class='price'>" + item.price + "</div>" + 
+                            //         "</div>"
+                            item_price = (item.price)/100;
+                            item_price = item_price * item.quantity;
+                            item_price = item_price.toFixed(2);
+                            total_price = Number(total_price) + Number(item_price);
+                            each_row = `
+                                <img class='cart-img' src='img/` + item.product_id + `.webp'>
+                                <div class='cart-details'>
+                                    <div class='cd-title'>` + item.product_name +`</div>
+                                    <div class='cd-others'>
+                                        <div class='quantity'>Qty: ` + item.quantity + `</div>
+                                        <div class='price'>$` + item_price + `</div>
+                                    </div>
+                                </div>
+                            `;
+                            rows += "<div class='cart-item'>" + each_row + "</div>";
+                        }
+                        // add all the rows to the table
+                        $('#cart-items').append(rows);
+                        
+                        total_price = Number(total_price) + Number(3.50);
+                        var subtotal = `<div class="price-text">$`+ total_price.toFixed(2) +`</div>`;
+                        $('#subtotal').append(subtotal);
+
+                        $('#cart_num').text(cart_num);
+
+                        $('#cart-items').css({
+                            overflow: 'scroll'
+                        })
+                    } else if (response.status == 400) {
+                        // No books
+                        console.log(result.message);
+                        noItemsMsg = `<div id="no-cart-items">
+                            <div class="no-cart-items">Your Cart is Empty</div>
+                            <a class="no-cart-items-btn" href="items.html">Shop for More</a>
+                            </div>
+                            `;
+                        $('#cart-items').append(noItemsMsg);
+                        $('#price').hide();
+                        $('#checkout-button').hide();
+                        $('#cart-items').css({
+                            height: '40px'
+                        })
+                    } else {
+                        // unexpected outcome, throw the error
+                        throw response.status;
+                    }
+                } catch (error) {
+                    // Errors when calling the service; such as network error, 
+                    // service offline, etc
+                    console.log
+        ('There is a problem retrieving cart data, please try again later.<br />' + error);
+                } // error
+        });
+
+        function checkout() {
+            $(async() => {           
+            // Change serviceURL to your own
+            var serviceURL = "http://127.0.0.1:5000/checkout";
+            var customerData = ({
+                "customer_id": 123456,
+                "customer_email": "abc@abc"
+            });
+
+            try {
+                const config = {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(customerData)
+                }
+                const response = await fetch(url, config)
+                const result = await response.json();
+                    if (response.status === 200) {
+                        //success
+                    } else if (response.status == 400) {
+                        //not success
+                    } else {
+                        // unexpected outcome, throw the error
+                        throw response.status;
+                    }
+                } catch (error) {
+                    // Errors when calling the service; such as network error, 
+                    // service offline, etc
+                    console.log
+                        ('There is a problem checking out, please try again later.<br />' + error);
+                                } // error
+                        });
+        }
+    </script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
     <!-- // function addedFirstItem(){
     //     //testing if the button is working
@@ -467,7 +725,7 @@ header("Access-Control-Allow-Origin: *");
     //             var firstProductId = firstItem['product_id']
     //             var firstProductName = firstItem['product_name']
     //             var firstQuantity = firstItem['quantity']
-    //             var firstImage = 'images/1.webp'
+    //             var firstImage = 'img/1.webp'
 
     //                 var firstInfo = '<div><img src =" '+ firstImage +               '"width="150" height="100" /></div>' +
     //                             '<h3> Item: ' + firstProductName + '</h3>' + 
@@ -482,7 +740,7 @@ header("Access-Control-Allow-Origin: *");
     //             var secondProductId = secondItem['product_id']
     //             var secondProductName = secondItem['product_name']
     //             var secondQuantity = secondItem['quantity']
-    //             var secondImage = 'images/2.jpeg'
+    //             var secondImage = 'img/2.jpeg'
 
     //                 var secondInfo = '<div><img src =" '+ secondImage + '" width="150" height="100" /></div>' +
     //                             '<h3> Item: ' + secondProductName + '</h3>' + 
@@ -497,7 +755,7 @@ header("Access-Control-Allow-Origin: *");
     //             var thirdProductId = thirdItem['product_id']
     //             var thirdProductName = thirdItem['product_name']
     //             var thirdQuantity = thirdItem['quantity']
-    //             var thirdImage = 'images/3.webp'
+    //             var thirdImage = 'img/3.webp'
 
     //     var thirdInfo = '<div><img src =" '+ thirdImage + '" width="150" height="100" /></div>' +
     //                             '<h3> Item: ' + thirdProductName + '</h3>' + 

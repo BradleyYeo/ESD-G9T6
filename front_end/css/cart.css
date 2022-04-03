@@ -55,6 +55,8 @@
     width: 50%;
     height: 10vh;
     border-radius: 20px;
+    text-decoration: none;
+    color: black;
 
     background-color: rgba(255, 255, 255, 0.863);
 
@@ -113,7 +115,6 @@
 .cart-img {
     width: 100px;
     height: 100px;
-    background-color: gray;
     margin-right: 30px;
 }
 

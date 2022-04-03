@@ -102,10 +102,10 @@
             </div>
         </div>
 
-        <div id="checkout-button">
+        <a id="checkout-button" onclick="checkout()" href="../payment/templates/checkout.html">
             <img src="img/stripe-brands.svg" alt="">
             Proceed to Checkout
-        </div>
+        </a>
     </div>
 
     <!-- LOGIN MODAL -->
@@ -135,7 +135,7 @@
     <nav>
         <div class="nav-left">
             <a href="landing_page.html" class="nav-link">HOME</a>
-            <a href="items.html" class="nav-link">ITEMS</a>
+            <a href="items.php" class="nav-link">ITEMS</a>
         </div>
         <div class="nav-brand">
             <a href="landing_page.html"><span style="color: var(--blue); font-style: italic;">BLUE</span>MART</a>
@@ -151,7 +151,7 @@
             <h1>FRESHEST GROCERIES<br>FOR YOU</h1>
             <a href="items.html">BUY NOW</a>
         </div>
-        <div id="showcase-items">
+        <!-- <div id="showcase-items">
             <p class="title">Freshest Groceries<p>
             <div class="items">
                 <div class="item"></div>
@@ -159,11 +159,7 @@
                 <div class="item"></div>
             </div>
             <a href="items.html" id="see-more">See more >></a>
-        </div>
-    </div>
-
-    <div id="footer">
-
+        </div> -->
     </div>
 
     <script>
@@ -199,7 +195,7 @@
         // - using await requires the function that calls it to be async
         $(async() => {           
             // Change serviceURL to your own
-            var serviceURL = "http://127.0.0.1:5000/cart/1";
+            var serviceURL = "http://127.0.0.1:5000/cart/2";
 
             try {
                 const response =
@@ -226,8 +222,7 @@
                             item_price = item_price.toFixed(2);
                             total_price = Number(total_price) + Number(item_price);
                             each_row = `
-                                <div class='cart-img'>
-                                </div>
+                                <img class='cart-img' src='img/` + item.product_id + `.webp'>
                                 <div class='cart-details'>
                                     <div class='cd-title'>` + item.product_name +`</div>
                                     <div class='cd-others'>
@@ -275,6 +270,43 @@
         ('There is a problem retrieving cart data, please try again later.<br />' + error);
                 } // error
         });
+
+        function checkout() {
+            $(async() => {           
+            // Change serviceURL to your own
+            var serviceURL = "http://127.0.0.1:5000/checkout";
+            var customerData = ({
+                "customer_id": 123456,
+                "customer_email": "abc@abc"
+            });
+
+            try {
+                const config = {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(customerData)
+                }
+                const response = await fetch(url, config)
+                const result = await response.json();
+                    if (response.status === 200) {
+                        //success
+                    } else if (response.status == 400) {
+                        //not success
+                    } else {
+                        // unexpected outcome, throw the error
+                        throw response.status;
+                    }
+                } catch (error) {
+                    // Errors when calling the service; such as network error, 
+                    // service offline, etc
+                    console.log
+                        ('There is a problem checking out, please try again later.<br />' + error);
+                                } // error
+                        });
+        }
     </script>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 </body>

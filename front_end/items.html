@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,12 +13,8 @@
     <link rel="stylesheet" href="css/cart.css">
 
     <!-- Latest compiled and minified JavaScript -->
-    <script
-       src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-       <script 
-       src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'
-       integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM'
-       crossorigin='anonymous'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM' crossorigin='anonymous'></script>
 
 </head>
 
@@ -125,11 +117,11 @@
                serviceURL, { method: 'GET' }
             );
             const result = await response.json();
-             if (response.status === 200) {
+                if (response.status === 200) {
                 // success case
                 var items = result.data.items; //the array is in items within data of 
                                                // the returned result
-                   
+                
                 var firstItem = items[0]
                 var firstPrice = firstItem['price']
                 var firstProductId = firstItem['product_id']
