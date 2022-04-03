@@ -1,24 +1,22 @@
+import json
+import os
+from os import environ
+
+import pika
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-import os
-import sys
-from os import environ
-
-import requests
-from invokes import invoke_http
-
 import amqp_setup
-import pika
-import json
+from invokes import invoke_http
 
 app = Flask(__name__)
 CORS(app)
 
-inventory_URL = environ.get('inventory_URL') or  "http://inventory_placeholder:5552/inventory"
+inventory_URL = environ.get('inventory_URL') or "http://inventory_placeholder:5552/inventory"
 cart_URL = environ.get('cart_URL') or "http://cart_placeholder:5000/cart"
-# payment_URL = environ.get('payment_URL') or "http://payment_placeholder:5553/payment"
 
+
+# payment_URL = environ.get('payment_URL') or "http://payment_placeholder:5553/payment"
 
 
 @app.route("/checkout", methods=['POST'])
@@ -35,8 +33,8 @@ def checkout():
         return jsonify(result), result["code"]
 
     except:
-        return 
-    # except Exception as e:
+        return
+        # except Exception as e:
     #     # Unexpected error in code
     #     exc_type, exc_obj, exc_tb = sys.exc_info()
     #     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -55,10 +53,9 @@ def checkout():
 
 
 def process_checkout(customer_id, customer_email):
-
     print("\n-----Invoking cart microservice-----")
     print("Getting customer's cart with their ID")
-    cart_response = invoke_http(url = cart_URL + "/" + str(customer_id), method='GET', json=None)
+    cart_response = invoke_http(url=cart_URL + "/" + str(customer_id), method='GET', json=None)
 
     code = cart_response["code"]
     if code not in range(200, 300):
@@ -74,13 +71,13 @@ def process_checkout(customer_id, customer_email):
 
     code = inventory_response["code"]
     ##################################################################################################
-    if code not in range(200, 300): #NOT TESTED YET, WIP
+    if code not in range(200, 300):  # NOT TESTED YET, WIP
         print("Inventory returned error")
         if code == 400 and inventory_response["message"].lower() == "not enough stock":
             print("Not enough stock in inventory")
             """To update the cart and user afterwards"""
             max_stock = inventory_response["data"]["cart_items"]
-            cart_response = invoke_http(url = cart_URL + "/" + str(customer_id), method='PUT', json=max_stock)
+            cart_response = invoke_http(url=cart_URL + "/" + str(customer_id), method='PUT', json=max_stock)
             return {"code": code, "message": str(inventory_response)}
         else:
             print("Unexpected error from inventory, exiting")
@@ -98,16 +95,15 @@ def process_checkout(customer_id, customer_email):
 
         print("\n-----Invoking cart microservice-----")
         print("Removing customer's cart with their ID")
-        cart_response = invoke_http(url = cart_URL + "/remove_all/" + str(customer_id), method='PUT', json=None)
-        
+        cart_response = invoke_http(url=cart_URL + "/remove_all/" + str(customer_id), method='PUT', json=None)
+
         code = cart_response["code"]
         if code not in range(200, 300):
             print("Unexpected error from cart, exiting")
             return {"code": code, "message": str(cart_response)}
-        
+
         print("Everything is successful")
         return {"code": code, "message": "success"}
-
 
 
 # def payment_method():
@@ -123,23 +119,20 @@ def publish_receipt(customer_id, customer_email, cart_items):
     order_id = 2
     total_price = 600
     message = {
-        "created": "Wed, 16 Dec 2020 13:15:47 GMT",         ### WIP
+        "created": "Wed, 16 Dec 2020 13:15:47 GMT",  ### WIP
         "customer_id": customer_id,
         "customer_email": customer_email,
-        "order_id": order_id,                               ### WIP
+        "order_id": order_id,  ### WIP
         "order_item": cart_items,
-        "total_price": total_price                          ### WIP
+        "total_price": total_price  ### WIP
     }
     print(str(message))
     message = json.dumps(message)
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="#",
-                                         body=message, properties=pika.BasicProperties(delivery_mode=2))
+                                     body=message, properties=pika.BasicProperties(delivery_mode=2))
 
-
-
-    # message = json.dumps(order_result) 
+    # message = json.dumps(order_result)
     # amqp_setup.check_setup()
-
 
     #     # Inform the error microservice
     #     #print('\n\n-----Invoking error microservice as order fails-----')
