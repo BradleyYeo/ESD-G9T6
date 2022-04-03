@@ -1,3 +1,4 @@
+import time
 import json
 import os
 from os import environ
@@ -61,6 +62,9 @@ def process_checkout(customer_id, customer_email):
 
     code = cart_response["code"]
     if code not in range(200, 300):
+        if code == 404 and cart_response["message"].lower() == "cart is empty.":
+            return {"code": code, "message": "Cart is empty."}
+    else:
         print("Unexpected error from cart, exiting")
         return {"code": code, "message": str(cart_response)}
 
@@ -122,13 +126,13 @@ def process_checkout(customer_id, customer_email):
 
 def publish_receipt(customer_id, customer_email, cart_items):
     amqp_setup.check_setup()
-    order_id = 2
+    order_id = get_order_id()  # every sec is a new unidque order_id
     total_price = calcalate_total_price(cart_items)
     message = {
         "created": str(datetime.now()),
         "customer_id": customer_id,
         "customer_email": customer_email,
-        "order_id": order_id,  ### WIP #append customer id and time stamp 
+        "order_id": order_id,
         "order_item": cart_items,
         "total_price": total_price
     }
@@ -143,6 +147,13 @@ def calcalate_total_price(cart_items):
     for item in cart_items:
         total_price += item["price"]
     return total_price
+
+def get_order_id():
+    date_time_str = '03/04/22 00:00:00'
+    date_time_obj = datetime.strptime(date_time_str, '%d/%m/%y %H:%M:%S')
+    unix_timestamp = time.mktime(date_time_obj.timetuple())
+    now_unix_timestamp = time.mktime(datetime.now().timetuple())
+    return int(now_unix_timestamp - unix_timestamp)
 
 #########################END###############################
 
