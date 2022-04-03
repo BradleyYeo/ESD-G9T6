@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get(
-    'dbURL')
+    'dbURL') or "mysql+mysqlconnector://is213@host.docker.internal:3306/inventory"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -66,6 +66,9 @@ def reduce_inventory():
     # check for existing item in inventory
     items = data["cart"]
 
+    new_cart = []
+    has_stock = True
+
     for item in items:
         product = InventoryModel.query.filter_by(product_id=item["product_id"]).first()
         if not product:
@@ -79,8 +82,18 @@ def reduce_inventory():
 
         new_quantity = int(item['quantity'])
 
-        if new_quantity <= product.quantity:
+        if new_quantity >= product.quantity:
+            has_stock = False
+            item["max_stock"] = product.quantity
+            new_cart.append(item)
+
+    if has_stock:
+        for item in items:
+            product = InventoryModel.query.filter_by(product_id=item["product_id"]).first()
+            new_quantity = int(item['quantity'])
             product.quantity -= new_quantity
+        try:
+            db.session.commit()
             return jsonify(
                 {
                     "code": 200,
@@ -88,14 +101,21 @@ def reduce_inventory():
                     "message": "Inventory decreased."
                 }
             ), 200
-    try:
-        db.session.commit()
-    except:
+        except:
+            return jsonify(
+                {
+                    "code": 500,
+                    "data": {},
+                    "message": "An error occurred when reducing items in inventory."
+                }
+            ), 500
+    else:
+        print(str(new_cart))
         return jsonify(
             {
                 "code": 500,
-                "data": {},
-                "message": "An error occurred when reducing items in inventory."
+                "data": new_cart,
+                "message": "not enough stock."
             }
         ), 500
 
