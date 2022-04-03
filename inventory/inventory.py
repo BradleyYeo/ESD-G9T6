@@ -78,11 +78,9 @@ def reduce_inventory():
             ), 404
 
         new_quantity = int(item['quantity'])
-        # if new_quantity > product.quantity:
-        #     raise NotEnoughStock
+
         if new_quantity <= product.quantity:
             product.quantity -= new_quantity
-            db.session.commit()
             return jsonify(
                 {
                     "code": 200,
@@ -90,19 +88,16 @@ def reduce_inventory():
                     "message": "Inventory decreased."
                 }
             ), 200
-
-        # except NotEnoughStock:
-        #     return jsonify(
-        #         {
-        #             "code": 400,
-        #             "product name": product.product_name,
-        #             "Quantity Available": product.quantity,
-        #             "initial cart qty": {
-        #                 "items": items
-        #             },
-        #             "message": "Not enough stock"
-        #         }
-        #     )
+    try:
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {},
+                "message": "An error occurred when reducing items in inventory."
+            }
+        ), 500
 
 
 @app.route("/inventory/add", methods=["PUT"])
@@ -113,7 +108,6 @@ def add_inventory():
         product = InventoryModel.query.filter_by(product_id=item["product_id"]).first()
         new_quantity = int(item['quantity'])
         product.quantity = new_quantity
-        db.session.commit()
         return jsonify(
             {
                 "code": 200,
@@ -121,7 +115,16 @@ def add_inventory():
                 "message": "Inventory increased."
             }
         ), 200
-
+    try:
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {},
+                "message": "An error occurred when reducing items in inventory."
+            }
+        ), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5552, debug=True)  # right number for docker compose
