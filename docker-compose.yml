@@ -115,7 +115,6 @@ services:
     restart: always
     depends_on:
       - cart_placeholder        #to connect to real cart
-      # - inventory_placeholder   #to connect to real inventory
       - inventory
       # - payment               #to connect to payment
       - rabbitmq
@@ -125,9 +124,8 @@ services:
     environment:
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      # inventory_URL: http://inventory_placeholder:5552/inventory
       inventory_URL: http://inventory:5552/inventory
-      cart_URL: http://cart_placeholder:5000/cart
+      cart_URL: http://cart_placeholder:5000/cart      #placeholder URL
       PYTHONUNBUFFERED: 1
     ports:
       - "5550:5550"
@@ -135,6 +133,7 @@ services:
   # ###############################################
   # placeholder cart and inventory
   # ###############################################
+  # NOT IN USED ANYMORE
   # inventory_placeholder:
   #   build:
   #     context: ./checkout
