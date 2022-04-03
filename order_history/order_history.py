@@ -37,7 +37,7 @@ class Order_history(db.Model):
 
 
 
-@app.route("/order_history")
+@app.route("/order_history") # body MUST be None
 def get_all():
     orderlist = Order_history.query.all()
     if len(orderlist):
@@ -51,8 +51,7 @@ def get_all():
         )
    
 
-
-@app.route("/order_history/<int:order_id>")
+@app.route("/order_history/<int:order_id>")  # body MUST be None
 def find_by_order_id(order_id):
     orderlist = Order_history.query.filter_by(order_id=order_id)
     if orderlist:
@@ -74,8 +73,20 @@ def find_by_order_id(order_id):
         }
     ), 404
 
-
-
+@app.route("/order_history/add", methods=['POST'])
+def add_order_to_order_history():
+    data = request.get_json()
+    print("============================================================")
+    print("============================================================")
+    print(data)
+    print("success")
+    print("============================================================")
+    print("============================================================")
+    return jsonify({
+            "code": 200,
+            "data": {},
+            "message": "success"
+        }), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
