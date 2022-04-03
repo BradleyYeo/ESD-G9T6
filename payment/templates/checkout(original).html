@@ -1,0 +1,46 @@
+<!--This is just to create the HTML purchase page-->
+
+<!DOCTYPE html>
+<html>
+<head>
+        <title>Stripe Payment</title>
+</head>
+
+<style type="text/css">
+        body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+        }
+</style>
+
+<body>
+
+    <form action="/charge" method="post">
+        <article>
+            <label>
+                <span>Please make payment</span>
+            </label>
+        </article>
+
+        <script src="https://checkout.stripe.com/checkout.js" 
+            class="stripe-button"
+            data-key="{{ key }}"
+            data-description="Bluemart Checkout"        data-amount="1000"
+            data-locale="auto">
+        </script>
+    </form>
+
+</body>
+</html>
+
+<!-- 
+class: this attribute takes in the Stripe class name.
+data-key: the data key takes in the secret key we will store in our environment variable, which Stripe provides to us while creating our Stripe account.
+data-description: A description of the charges is being passed here.
+data-amount: this is the integer value of the amount being charged (in cents).
+
+Note that a POST request is sent to the server-side, to a route called “/charge” on submit.
+
+ -->
