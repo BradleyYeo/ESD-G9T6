@@ -10,7 +10,7 @@ from os import environ
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or "mysql+mysqlconnector://is213@host.docker.internal:3306/order_history"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
@@ -31,6 +31,16 @@ class Order_history(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
     total_price = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, customer_id, customer_email, order_id, total_price, item_id, product_name, quantity, price):
+        self.customer_id = customer_id
+        self.customer_email = customer_email
+        self.order_id = order_id
+        self.total_price = total_price
+        self.item_id = item_id
+        self.product_name = product_name
+        self.quantity = quantity
+        self.price = price
 
     def json(self):
         return {'product_id': self.id, 'created': self.created, 'customer_id': self.customer_id,'customer_email': self.customer_email, 'order_id': self.order_id,'item_id': self.item_id, 'product_name': self.product_name, 'quantity': self.quantity, 'price': self.price, 'total_price': self.total_price}
@@ -75,13 +85,46 @@ def find_by_order_id(order_id):
 
 @app.route("/order_history/add", methods=['POST'])
 def add_order_to_order_history():
+
     data = request.get_json()
-    print("============================================================")
-    print("============================================================")
-    print(data)
-    print("success")
-    print("============================================================")
-    print("============================================================")
+
+    # created = datetime.strptime(data["created"], '%d/%m/%y %H:%M:%S')
+    customer_id = data["customer_id"]
+    customer_email = data["customer_email"]
+    order_id = data["order_id"]
+    total_price = data["total_price"]
+
+    order_item = data["order_item"]
+
+    for item in order_item:
+        item_id = item["product_id"]
+        product_name = item["product_name"]
+        quantity = item["quantity"]
+        price = item["price"]
+        order_row = Order_history(customer_id, customer_email,
+                              order_id, total_price, item_id, product_name, quantity, price)
+        try:
+            db.session.add(order_row)
+        except:
+            return jsonify(
+            {
+                "code": 500,
+                "data": {},
+                "message": "An error occurred when creating new order row."
+            }
+        ), 500
+    
+    try:
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {},
+                "message": "An error occurred when commiting new order."
+            }
+        ), 500
+
     return jsonify({
             "code": 200,
             "data": {},

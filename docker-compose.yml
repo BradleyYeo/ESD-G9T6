@@ -48,18 +48,18 @@ services:
   # Notification: The Notification microservice
   # Completed
   #################################################
-  # notification:
-  #   build:
-  #     context: ./notification
-  #     dockerfile: notification.Dockerfile
-  #   image: tame123/notification:1.0
-  #   restart: always
-  #   depends_on:
-  #     - rabbitmq
-  #   environment:
-  #     rabbit_host: rabbitmq
-  #     rabbit_port: 5672
-  #     PYTHONUNBUFFERED: 1
+  notification:
+    build:
+      context: ./notification
+      dockerfile: notification.Dockerfile
+    image: tame123/notification:1.0
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
 
   ###################################
   # Error: The Error microservice
@@ -132,9 +132,11 @@ services:
   #   ports:
   #     - "5000:5000"
       
-##################################
-  # WIP
-  ##################################
+  #################################################
+  # Order_history: The Order_history microservice
+  # Completed
+  #################################################
+
   order_history:
     build:
       context: ./order_history
@@ -148,7 +150,8 @@ services:
       PYTHONUNBUFFERED: 1
     ports:
       - "5001:5001"
-
+  
+  #Wrapper MS to consume from Que and convert to http
   order_history_wrapper:
     build:
       context: ./order_history/wrapper
@@ -168,48 +171,49 @@ services:
   # # WIP
   # # Checkout: Checkout microservice
   # ###############################################
-  # checkout:
-  #   build:
-  #     context: ./checkout
-  #     dockerfile: checkout.Dockerfile
-  #   image: tame123/checkout:1.0
-  #   restart: always
-  #   depends_on:
-  #     - cart_placeholder        #to connect to real cart
-  #     - inventory_placeholder   #to connect to real inventory
-  #     # - payment               #to connect to payment
-  #     - rabbitmq
-  #     # - order_history         #to connect to rabbit MQ
-  #     - notification
-  #   environment:
-  #     rabbit_host: rabbitmq
-  #     rabbit_port: 5672
-  #     inventory_URL: http://inventory_placeholder:5552/inventory
-  #     cart_URL: http://cart_placeholder:5000/cart
-  #     PYTHONUNBUFFERED: 1
-  #   ports:
-  #     - "5550:5550"
+  checkout:
+    build:
+      context: ./checkout
+      dockerfile: checkout.Dockerfile
+    image: tame123/checkout:1.0
+    restart: always
+    depends_on:
+      - cart_placeholder        #to connect to real cart
+      - inventory_placeholder   #to connect to real inventory
+      # - payment               #to connect to payment
+      - rabbitmq
+      - order_history
+      - order_history_wrapper
+      - notification
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      inventory_URL: http://inventory_placeholder:5552/inventory
+      cart_URL: http://cart_placeholder:5000/cart
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5550:5550"
 
   # ###############################################
   # placeholder cart and inventory
   # ###############################################
-  # inventory_placeholder:
-  #   build:
-  #     context: ./checkout
-  #     dockerfile: inventory.Dockerfile
-  #   image: tame123/inventory:1.0
-  #   restart: always
-  #   environment:
-  #     PYTHONUNBUFFERED: 1
+  inventory_placeholder:
+    build:
+      context: ./checkout
+      dockerfile: inventory.Dockerfile
+    image: tame123/inventory:1.0
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
 
-  # cart_placeholder:
-  #   build:
-  #     context: ./checkout
-  #     dockerfile: cart.Dockerfile
-  #   image: tame123/cart:1.0
-  #   restart: always
-  #   environment:
-  #     PYTHONUNBUFFERED: 1
+  cart_placeholder:
+    build:
+      context: ./checkout
+      dockerfile: cart.Dockerfile
+    image: tame123/cart:1.0
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
 
   ###################################
   # Payment: The Payment microservice
