@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
 from os import environ
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get(
@@ -59,8 +60,8 @@ def get_all():
     ), 500
 
 
-@app.route('/inventory/update', methods=['PUT'])
-def update_inventory():
+@app.route('/inventory/reduce', methods=['PUT'])
+def reduce_inventory():
     data = request.get_json()
     # check for existing item in inventory
     items = data["cart"]
@@ -104,6 +105,23 @@ def update_inventory():
             }
         )
 
+
+@app.route("/inventory/add", methods=["PUT"])
+def add_inventory():
+    data = request.get_json()
+    items = data["add"]
+    for item in items:
+        product = InventoryModel.query.filter_by(product_id=item["product_id"]).first()
+        new_quantity = int(item['quantity'])
+        product.quantity = new_quantity
+        db.session.commit()
+        return jsonify(
+            {
+                "code": 200,
+                "data": data,
+                "message": "Inventory increased."
+            }
+        ), 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5552, debug=True)  # right number for docker compose
