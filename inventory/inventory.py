@@ -21,8 +21,8 @@ class InventoryModel(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, id, product_name, quantity, price):
-        self.product_id = id
+    def __init__(self, product_id, product_name, quantity, price):
+        self.product_id = product_id
         self.product_name = product_name
         self.quantity = quantity
         self.price = price
@@ -34,9 +34,9 @@ class InventoryModel(db.Model):
                 "price": self.price}
 
 
-class NotEnoughStock(Exception):
-    """Not enough stock"""
-    pass
+# class NotEnoughStock(Exception):
+#     """Not enough stock"""
+#     pass
 
 
 @app.route('/inventory/all')
@@ -66,44 +66,43 @@ def reduce_inventory():
     # check for existing item in inventory
     items = data["cart"]
 
-    try:
-        for item in items:
-            product = InventoryModel.query.filter_by(product_id=item["product_id"]).first()
-            if not product:
-                return jsonify(
-                    {
-                        "code": 404,
-                        "data": {},
-                        "message": "ItemID is invalid or does not exist."
-                    }
-                ), 404
+    for item in items:
+        product = InventoryModel.query.filter_by(product_id=item["product_id"]).first()
+        if not product:
+            return jsonify(
+                {
+                    "code": 404,
+                    "data": {},
+                    "message": "ItemID is invalid or does not exist."
+                }
+            ), 404
 
-            new_quantity = int(item['quantity'])
-            if new_quantity > product.quantity:
-                raise NotEnoughStock
-            elif new_quantity <= product.quantity:
-                product.quantity -= new_quantity
-                db.session.commit()
-                return jsonify(
-                    {
-                        "code": 200,
-                        "data": data,
-                        "message": "Inventory decreased."
-                    }
-                ), 200
+        new_quantity = int(item['quantity'])
+        # if new_quantity > product.quantity:
+        #     raise NotEnoughStock
+        if new_quantity <= product.quantity:
+            product.quantity -= new_quantity
+            db.session.commit()
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": data,
+                    "message": "Inventory decreased."
+                }
+            ), 200
 
-    except NotEnoughStock:
-        return jsonify(
-            {
-                "code": 400,
-                "product name": product.product_name,
-                "Quantity Available": product.quantity,
-                "initial cart qty": {
-                    "items": items
-                },
-                "message": "Not enough stock"
-            }
-        )
+        # except NotEnoughStock:
+        #     return jsonify(
+        #         {
+        #             "code": 400,
+        #             "product name": product.product_name,
+        #             "Quantity Available": product.quantity,
+        #             "initial cart qty": {
+        #                 "items": items
+        #             },
+        #             "message": "Not enough stock"
+        #         }
+        #     )
 
 
 @app.route("/inventory/add", methods=["PUT"])
@@ -122,6 +121,7 @@ def add_inventory():
                 "message": "Inventory increased."
             }
         ), 200
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5552, debug=True)  # right number for docker compose
