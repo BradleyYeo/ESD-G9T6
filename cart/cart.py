@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
 from os import environ
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
@@ -106,13 +107,6 @@ def add_to_cart():
             }
         ), 500
 
-        return jsonify(
-            {
-                "code": 201,
-                "data": cart.json()
-            }
-        ), 201
-
 
 # REMOVE ALL ITEMS FROM CUSTOMER'S CART
 @app.route("/cart/remove_all/<int:customer_id>", methods=['PUT'])
@@ -183,7 +177,7 @@ def update_cart():
             {
                 "code": 500,
                 "data": {
-                    "quantity": new_quantity
+                    "quantity": data
                 },
                 "message": "An error occurred while updating the cart items… Can’t connect to MySQL server on ‘localhost:3306’"
             }

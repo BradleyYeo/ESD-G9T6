@@ -1,11 +1,12 @@
-from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
 from os import environ
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get(
-    'dbURL')
+    'dbURL') or "mysql+mysqlconnector://is213@host.docker.internal:3306/inventory"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -20,8 +21,8 @@ class InventoryModel(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, id, product_name, quantity, price):
-        self.product_id = id
+    def __init__(self, product_id, product_name, quantity, price):
+        self.product_id = product_id
         self.product_name = product_name
         self.quantity = quantity
         self.price = price
@@ -33,9 +34,9 @@ class InventoryModel(db.Model):
                 "price": self.price}
 
 
-class NotEnoughStock(Exception):
-    """Not enough stock"""
-    pass
+# class NotEnoughStock(Exception):
+#     """Not enough stock"""
+#     pass
 
 
 @app.route('/inventory/all')
@@ -59,50 +60,93 @@ def get_all():
     ), 500
 
 
-@app.route('/inventory/update', methods=['PUT'])
-def update_inventory():
+@app.route('/inventory/reduce', methods=['PUT'])
+def reduce_inventory():
     data = request.get_json()
     # check for existing item in inventory
     items = data["cart"]
 
-    try:
+    new_cart = []
+    has_stock = True
+
+    for item in items:
+        product = InventoryModel.query.filter_by(product_id=item["product_id"]).first()
+        if not product:
+            return jsonify(
+                {
+                    "code": 404,
+                    "data": {},
+                    "message": "ItemID is invalid or does not exist."
+                }
+            ), 404
+
+        new_quantity = int(item['quantity'])
+
+        if new_quantity >= product.quantity:
+            has_stock = False
+            item["max_stock"] = product.quantity
+            new_cart.append(item)
+
+    if has_stock:
         for item in items:
             product = InventoryModel.query.filter_by(product_id=item["product_id"]).first()
-            if not product:
-                return jsonify(
-                    {
-                        "code": 404,
-                        "data": {},
-                        "message": "ItemID is invalid or does not exist."
-                    }
-                ), 404
-
             new_quantity = int(item['quantity'])
-            if new_quantity > product.quantity:
-                raise NotEnoughStock
-            elif new_quantity <= product.quantity:
-                product.quantity -= new_quantity
-                db.session.commit()
-                return jsonify(
-                    {
-                        "code": 200,
-                        "data": data,
-                        "message": "Inventory decreased."
-                    }
-                ), 200
-
-    except NotEnoughStock:
+            product.quantity -= new_quantity
+        try:
+            db.session.commit()
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {},
+                    "message": "Inventory decreased."
+                }
+            ), 200
+        except:
+            return jsonify(
+                {
+                    "code": 500,
+                    "data": {},
+                    "message": "An error occurred when reducing items in inventory."
+                }
+            ), 500
+    else:
+        print(str(new_cart))
         return jsonify(
             {
-                "code": 400,
-                "product name": product.product_name,
-                "Quantity Available": product.quantity,
-                "initial cart qty": {
-                    "items": items
+                "code": 500,
+                "data": {
+                    "cart": new_cart
                 },
-                "message": "Not enough stock"
+                "message": "Not enough stock."
             }
-        )
+        ), 500
+
+#not tested with complex
+@app.route("/inventory/add", methods=["PUT"])
+def add_inventory():
+    data = request.get_json()
+    items = data["add"]
+    for item in items:
+        product = InventoryModel.query.filter_by(product_id=item["product_id"]).first()
+        new_quantity = int(item['quantity'])
+        product.quantity = new_quantity
+        return jsonify(
+            {
+                "code": 200,
+                "data": data,
+                "message": "Inventory increased."
+            }
+        ), 200
+    try:
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {},
+                "message": "An error occurred when reducing items in inventory."
+            }
+        ), 500
 
 
 if __name__ == "__main__":

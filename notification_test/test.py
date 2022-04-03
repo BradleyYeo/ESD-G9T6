@@ -19,7 +19,7 @@ def get_customer_cart():
 
     customer_id = 43
     customer_email = 'tianyu.chen.2020@smu.edu.sg'
-    cart_items = {
+    cart_items = [{
         "price": 256,
         "product_id": 1,
         "product_name": "apple",
@@ -30,7 +30,7 @@ def get_customer_cart():
         "product_id": 2,
         "product_name": "banana",
         "quantity": 1
-    }
+    }]
     try:
         publish_receipt(customer_id, customer_email, cart_items)
         return jsonify({"code": 200}), 200
