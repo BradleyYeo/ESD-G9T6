@@ -16,6 +16,7 @@ header("Access-Control-Allow-Origin: *");
     <link rel="stylesheet" href="css/landing_page.css">
     <link rel="stylesheet" href="css/cart.css">
     <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/items.css">
 
     <!-- Latest compiled and minified JavaScript -->
     <script
@@ -159,9 +160,7 @@ header("Access-Control-Allow-Origin: *");
         </div>
         <div class="nav-right">
             <a href="" class="nav-link">LOGIN/SIGN UP</a>
-            <div class="cart-button" id="cart-button">
-                CART {{cartNum}}
-            </div>
+            <div class="cart-button" id="cart-button">CART ( <span id="cart_num">0</span> )</div>
         </div>
     </nav>
 
@@ -170,8 +169,8 @@ header("Access-Control-Allow-Origin: *");
             <p class="title">All Items<p>
             <div class="items" v-if="noError">
                 <div class="item" id="first-item">
-                    <div>
-                        <img src ="img/1.webp" width="150" height="100"/>
+                    <div class="item-img">
+                        <img src ="img/1.webp"/>
                     </div>
                         <h3> Item: {{firstProductName}} </h3> 
                         <p> Price: {{firstPrice}} cents</p>
@@ -180,8 +179,8 @@ header("Access-Control-Allow-Origin: *");
                         <button v-on:click="addedFirstItem" type="button" class="button" id="button1">Add to Cart!</button>
                 </div>
                 <div class="item" id="second-item">
-                    <div>
-                        <img src ="img/2.webp" width="150" height="100"/>
+                    <div class="item-img">
+                        <img src ="img/2.webp"/>
                     </div>
                         <h3> Item: {{secondProductName}} </h3> 
                         <p> Price: {{secondPrice}} cents</p>
@@ -190,8 +189,8 @@ header("Access-Control-Allow-Origin: *");
                         <button v-on:click="addedSecondItem" type="button" class="button" id="button2">Add to Cart!</button>
                 </div>
                 <div class="item" id="third-item">
-                    <div>
-                        <img src ="img/3.webp" width="150" height="100"/>
+                    <div class="item-img">
+                        <img src ="img/3.webp"/>
                     </div>
                         <h3> Item: {{thirdProductName}} </h3> 
                         <p> Price: {{thirdPrice}} cents</p>
@@ -648,7 +647,7 @@ header("Access-Control-Allow-Origin: *");
         function checkout() {
             $(async() => {           
             // Change serviceURL to your own
-            var serviceURL = "http://127.0.0.1:5000/checkout";
+            var serviceURL = "http://127.0.0.1:5550/checkout";
             var customerData = ({
                 "customer_id": 123456,
                 "customer_email": "abc@abc"

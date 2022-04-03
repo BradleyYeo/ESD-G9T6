@@ -149,7 +149,7 @@
     <div id="hero">
         <div id="header">
             <h1>FRESHEST GROCERIES<br>FOR YOU</h1>
-            <a href="items.html">BUY NOW</a>
+            <a href="items.php">BUY NOW</a>
         </div>
         <!-- <div id="showcase-items">
             <p class="title">Freshest Groceries<p>
@@ -274,7 +274,7 @@
         function checkout() {
             $(async() => {           
             // Change serviceURL to your own
-            var serviceURL = "http://127.0.0.1:5000/checkout";
+            var serviceURL = "http://127.0.0.1:5550/checkout";
             var customerData = ({
                 "customer_id": 123456,
                 "customer_email": "abc@abc"

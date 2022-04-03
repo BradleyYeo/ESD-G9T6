@@ -85,8 +85,8 @@ nav a:hover {
 .item {
     width: 30%;
     height: 50vh;
-    background-color: lightpink;
     border-radius: 5%;
+    border: solid black 2px;
 }
 
 /*
