@@ -199,6 +199,12 @@ header("Access-Control-Allow-Origin: *");
             });
         });
     </script>
+<!-- for redirecting to payment -->
+<form id="invisible_form" action="http://localhost:5069/payment" method="post" target="_blank">
+    <input id="customer_id" name="parameter" type="hidden" value="default">
+    <input id="customer_email" name="parameter" type="hidden" value="default">
+    <input id="total_cost" name="parameter" type="hidden" value="default">
+</form>
 
     <script>
         //onload start
@@ -339,32 +345,39 @@ header("Access-Control-Allow-Origin: *");
                 var serviceURL = "http://127.0.0.1:5069/payment";
                 var customerData = ({
                     "customer_id": 1,
-                    "customer_email": "tianyu.chen.2020@smu.edu.sg"
+                    "customer_email": "tianyu.chen.2020@smu.edu.sg",
+                    "total_cost": 10000
                 });
+                $('#customer_id').val('1');
+                $('#customer_email').val("tianyu.chen.2020@smu.edu.sg");
+                $('#total_cost').val(10000);
+                $('#invisible_form').submit();
 
-                try {
-                    const config = {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(customerData)
-                    }
-                    const response = await fetch(serviceURL, config)
-                    const result = await response
-                    if (response.status === 200) {
-                        //success
+                // try {
+                //     const config = {
+                //         method: 'POST',
+                //         headers: {
+                //             'Accept': 'application/json',
+                //             'Content-Type': 'application/json',
+                //         },
+                //         body: JSON.stringify(customerData)
+                //     }
+                //     window.location.replace("http://localhost:5069/payment", methods=["POST"])
+                    
+                    // const response = await fetch(serviceURL, config)
+                    // const result = await response
+                    // if (response.status === 200) {
+                    //     //success
                         
-                    } else {
-                        // unexpected outcome, throw the error
-                        alert(response.status);
-                    }
-                } catch (error) {
-                    // Errors when calling the service; such as network error, 
-                    // service offline, etc
-                    console.log('There is a problem checking out, please try again later.<br />' + error);
-                } // error
+                    // } else {
+                    //     // unexpected outcome, throw the error
+                    //     alert(response.status);
+                    // }
+                // } catch (error) {
+                //     // Errors when calling the service; such as network error, 
+                //     // service offline, etc
+                //     console.log('There is a problem checking out, please try again later.<br />' + error);
+                // } // error
             });
         }
     </script>
