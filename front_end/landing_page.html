@@ -83,7 +83,6 @@ header("Access-Control-Allow-Origin: *");
 
     <!-- CART -->
     <div id="cart">
-        <!-- MAKE SURE TO MAKE THE REST OF THE PAGE UNSCROLLABLE WHEN CART IS OPEN -->
 
         <div class="top-row">
             <img src="img/angle-left-solid.svg" alt="" class="close">
@@ -102,7 +101,6 @@ header("Access-Control-Allow-Origin: *");
             </div>
             <div id="subtotal">
                 <div class="subtotal-text">Subtotal</div>
-                <!-- <div class="price-text">$3.50</div> -->
             </div>
         </div>
 
@@ -161,15 +159,6 @@ header("Access-Control-Allow-Origin: *");
             <h1>FRESHEST GROCERIES<br>FOR YOU</h1>
             <a href="items.php">BUY NOW</a>
         </div>
-        <!-- <div id="showcase-items">
-            <p class="title">Freshest Groceries<p>
-            <div class="items">
-                <div class="item"></div>
-                <div class="item"></div>
-                <div class="item"></div>
-            </div>
-            <a href="items.html" id="see-more">See more >></a>
-        </div> -->
     </div>
 
     <script>
@@ -235,11 +224,6 @@ header("Access-Control-Allow-Origin: *");
                     var cart_num = cart.length;
                     var rows = "";
                     for (const item of cart) {
-                        // eachRow = "<div class='title'>"+ item.product_name + "</div>" +
-                        //         "<div class='details'>" + 
-                        //             "<div class='quantity'>" + item.quantity + "</div>" + 
-                        //             "<div class='price'>" + item.price + "</div>" + 
-                        //         "</div>"
                         item_price = (item.price) / 100;
                         item_price = item_price * item.quantity;
                         item_price = item_price.toFixed(2);
@@ -256,7 +240,6 @@ header("Access-Control-Allow-Origin: *");
                             `;
                         rows += "<div class='cart-item'>" + each_row + "</div>";
                     }
-                    // add all the rows to the table
                     $('#cart-items').append(rows);
 
                     total_price = Number(total_price) + Number(3.50);

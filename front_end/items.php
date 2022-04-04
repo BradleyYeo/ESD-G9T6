@@ -97,7 +97,6 @@ header("Access-Control-Allow-Origin: *");
 
     <!-- CART -->
     <div id="cart">
-        <!-- MAKE SURE TO MAKE THE REST OF THE PAGE UNSCROLLABLE WHEN CART IS OPEN -->
         
         <div class="top-row">
             <img src="img/angle-left-solid.svg" alt="" class="close">
@@ -116,7 +115,6 @@ header("Access-Control-Allow-Origin: *");
             </div>
             <div id="subtotal">
                 <div class="subtotal-text">Subtotal</div>
-                <!-- <div class="price-text">$3.50</div> -->
             </div>
         </div>
 
@@ -545,11 +543,6 @@ header("Access-Control-Allow-Origin: *");
                         var cart_num = cart.length;
                         var rows = "";
                         for (const item of cart) {
-                            // eachRow = "<div class='title'>"+ item.product_name + "</div>" +
-                            //         "<div class='details'>" + 
-                            //             "<div class='quantity'>" + item.quantity + "</div>" + 
-                            //             "<div class='price'>" + item.price + "</div>" + 
-                            //         "</div>"
                             item_price = (item.price)/100;
                             item_price = item_price * item.quantity;
                             item_price = item_price.toFixed(2);
