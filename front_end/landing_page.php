@@ -1,3 +1,7 @@
+<?php
+header("Access-Control-Allow-Origin: *");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,10 +106,16 @@
             </div>
         </div>
 
-        <a id="checkout-button" onclick="checkout()" href="../payment/templates/checkout.html">
+        <a id="checkout-button" onclick="checkout()">
             <img src="img/stripe-brands.svg" alt="">
             Proceed to Checkout
         </a>
+
+        <a id="payment-button" onclick="payment()">
+            <img src="img/stripe-brands.svg" alt="">
+            Proceed to Payment
+        </a>
+
     </div>
 
     <!-- LOGIN MODAL -->
@@ -134,11 +144,11 @@
     <!--  NAVIGATION BAR -->
     <nav>
         <div class="nav-left">
-            <a href="landing_page.html" class="nav-link">HOME</a>
+            <a href="landing_page.php" class="nav-link">HOME</a>
             <a href="items.php" class="nav-link">ITEMS</a>
         </div>
         <div class="nav-brand">
-            <a href="landing_page.html"><span style="color: var(--blue); font-style: italic;">BLUE</span>MART</a>
+            <a href="landing_page.php"><span style="color: var(--blue); font-style: italic;">BLUE</span>MART</a>
         </div>
         <div class="nav-right">
             <div class="nav-link" id="login-sign-up">LOGIN/SIGN UP</div>
@@ -276,8 +286,8 @@
             // Change serviceURL to your own
             var serviceURL = "http://127.0.0.1:5550/checkout";
             var customerData = ({
-                "customer_id": 123456,
-                "customer_email": "abc@abc"
+                "customer_id": 1,
+                "customer_email": "tianyu.chen.2020@smu.edu.sg"
             });
 
             try {
@@ -289,15 +299,52 @@
                     },
                     body: JSON.stringify(customerData)
                 }
-                const response = await fetch(url, config)
+                const response = await fetch(serviceURL, config)
                 const result = await response.json();
                     if (response.status === 200) {
                         //success
-                    } else if (response.status == 400) {
+                        $('checkout-button').hide();
+                        $('payment-button').show();
+                    } else {
                         //not success
+                        alert(response.message);
+                    } 
+                } catch (error) {
+                    // Errors when calling the service; such as network error, 
+                    // service offline, etc
+                    console.log
+                        ('There is a problem checking out, please try again later.<br />' + error);
+                                } // error
+                        });
+        }
+
+        function payment() {
+            $(async() => {           
+            // Change serviceURL to your own
+            var serviceURL = "http://127.0.0.1:5069/payment";
+            var customerData = ({
+                "customer_id": 1,
+                "customer_email": "tianyu.chen.2020@smu.edu.sg"
+            });
+
+            try {
+                const config = {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(customerData)
+                }
+                const response = await fetch(serviceURL, config)
+                const result = await response.json();
+                    if (response.status === 200) {
+                        //success
+                        $('checkout-button').hide();
+                        $('payment-button').show();
                     } else {
                         // unexpected outcome, throw the error
-                        throw response.status;
+                        alert(response.status);
                     }
                 } catch (error) {
                     // Errors when calling the service; such as network error, 
