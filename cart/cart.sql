@@ -46,12 +46,13 @@ CREATE TABLE IF NOT EXISTS `cart` (
 --
 
 INSERT INTO `cart` (`cart_id`, `customer_id`, `product_id`, `product_name`, `price`, `quantity`) VALUES
-(1, 1, 1, 'apple', 400, 2),
-(2, 1, 2, 'banana', 300, 1),
-(3, 1, 3, 'pineapple', 500, 2),
-(4, 2, 1, 'apple', 400, 2),
-(5, 1, 2, 'banana', 300, 1),
-(6, 2, 3, 'pineapple', 500, 2);
+(1, 1, 1, 'apple', 80, 10),
+(2, 1, 2, 'banana', 400, 10),
+(3, 1, 3, 'pineapple', 250, 10),
+(4, 2, 4, 'orange', 80, 3),
+(5, 2, 5, 'pear', 400, 3),
+(6, 3, 4, 'orange', 80, 3),
+(7, 3, 6, 'grapes', 250, 3);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

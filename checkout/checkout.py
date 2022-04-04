@@ -136,8 +136,8 @@ def process_checkout_payment_success(customer_id, customer_email):
     if code not in range(200, 300):
         print("Unexpected error from cart, exiting")
         return {"code": code, "message": str(cart_response)}
-    print("Everything is successful")
-    return {"code": code, "message": "success"}
+    print("Everything is successful.")
+    return {"code": code, "message": "Everything is successful."}
 
 
 
