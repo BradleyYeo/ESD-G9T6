@@ -1,6 +1,6 @@
-<?php
+<!-- <?php
 header("Access-Control-Allow-Origin: *");
-?>
+?> -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -344,7 +344,7 @@ header("Access-Control-Allow-Origin: *");
 
                 try {
                     const config = {
-                        method: 'GET',
+                        method: 'POST',
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json',
@@ -352,11 +352,10 @@ header("Access-Control-Allow-Origin: *");
                         body: JSON.stringify(customerData)
                     }
                     const response = await fetch(serviceURL, config)
-                    const result = await response.json();
+                    const result = await response
                     if (response.status === 200) {
                         //success
-                        $('#checkout-button').hide();
-                        $('#payment-button').show();
+                        
                     } else {
                         // unexpected outcome, throw the error
                         alert(response.status);
