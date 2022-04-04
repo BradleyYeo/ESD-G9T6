@@ -348,12 +348,15 @@ header("Access-Control-Allow-Origin: *");
                     "customer_email": "tianyu.chen.2020@smu.edu.sg",
                     "total_cost": 10000
                 });
-
+                
                 $('#customer_id').val('1');
                 $('#customer_email').val("tianyu.chen.2020@smu.edu.sg");
                 $('#total_cost').val(10000);
                 $('#invisible_form').submit();
-
+                
+                
+                $('#payment-button').hide();
+                location.reload(); //refresh the page incase to prevent user from clicking payment many times
                 // try {
                 //     const config = {
                 //         method: 'POST',
