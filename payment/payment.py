@@ -31,9 +31,8 @@ def checkout():
     data = request.get_data(as_text=True)
     print("data:", data)
 
-    global orderdata
-    orderdata = data
-
+    # global orderdata
+    # orderdata = data
     # print(request)
     # total_price = data["total_price"]
     # customer_email = data["customer_email"]
@@ -81,28 +80,28 @@ def stripe_webhook():
         )
     except ValueError as e:
         # invalid payload
-        # return "Invalid payload", 400 # this is the original one
-        ### ignore the jsonify return first since it seems to be returning somewhere else
-        # return jsonify(
-        #     {
-        #         "code": 400,
-        #         "data": {},
-        #         "message": "Payment Failed, Invalid Payload"
-        #     }
-        # )
+        print("Payment Failed, Invalid Payload")
         return render_template('chargefailed1.html', amount=amount)
+        return jsonify(
+            {
+                "code": 400,
+                "data": {},
+                "message": "Payment Failed, Invalid Payload"
+            }
+        )
 
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
         # return "Invalid signature", 400 #this is the original one
         ### ignore the jsonify return first since it seems to be returning somewhere else
-        # return jsonify(
-        #     {
-        #         "code": 400,
-        #         "data": {},
-        #         "message": "Payment Failed, Invalid Signature"
-        #     }
-        # )
+        return jsonify(
+            {
+                "code": 400,
+                "data": {},
+                "message": "Payment Failed, Invalid Signature"
+            }
+        )
+        print("Payment Failed, Invalid Signature")
         return render_template('chargefailed2.html', amount=amount)
 
         # Handle the checkout.session.completed event
@@ -122,15 +121,15 @@ def stripe_webhook():
         #     }
         # )
         # let me try to redirect to payment complex MS here / redirect back to UI which will call checkout complex MS
-        return redirect(f"/checkout")  # trying to redirect to complex #try if it works
+        # return redirect(f"/checkout")  # trying to redirect to complex #try if it works
 
-    # return jsonify(
-    #     {
-    #         "code": 200,
-    #         "data": {},
-    #         "message": "Payment Successful"
-    #     }
-    # )
+    return jsonify(
+        {
+            "code": 200,
+            "data": {},
+            "message": "Payment Successful"
+        }
+    )
 
 
 if __name__ == '__main__':
