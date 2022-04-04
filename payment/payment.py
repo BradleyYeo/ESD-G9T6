@@ -21,6 +21,10 @@ stripe.api_key = stripe_keys["secret_key"]
 # this should be redirected from the UI when the "checkout/payment button is clicked first"
 @app.route('/payment')
 def checkout():
+    data = request.get_json()
+    total_price = data["total_price"]
+    customer_email = data["customer_email"]
+    customer_id = data["customer_id"]
     return render_template('checkout.html',key=stripe_keys['publishable_key'])
 
 ##################stripe checkout payment session for payment details############
