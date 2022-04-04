@@ -258,8 +258,8 @@ header("Access-Control-Allow-Origin: *");
     </div>
 
     <script>
-        var get_all_URL = "http://192.168.1.3:5552/inventory";
-        var cart_URL = 'http://192.168.1.3:5000/cart'
+        var get_all_URL = "http://localhost:5552/inventory";
+        var cart_URL = 'http://localhost:5000/cart'
 
         const app = Vue.createApp({
             data(){
