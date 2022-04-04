@@ -157,11 +157,11 @@ header("Access-Control-Allow-Origin: *");
     <div id="app">
     <nav>
         <div class="nav-left">
-            <a href="landing_page.php" class="nav-link">HOME</a>
+            <a href="landing_page.html" class="nav-link">HOME</a>
             <a href="items.html" class="nav-link">ITEMS</a>
         </div>
         <div class="nav-brand">
-            <a href="landing_page.php"><span style="color: var(--blue); font-style: italic;">BLUE</span>MART</a>
+            <a href="landing_page.html"><span style="color: var(--blue); font-style: italic;">BLUE</span>MART</a>
         </div>
         <div class="nav-right">
         <div class="nav-link" id="login-sign-up">LOGIN/SIGN UP</div>
@@ -216,6 +216,8 @@ header("Access-Control-Allow-Origin: *");
                             <p id="firstQuantity"> Quantity Available:{{thirdQuantity}}</p> 
                             <button v-on:click="addedThirdItem" type="button" class="button" id="button3">Add to Cart!</button>
                     </div>
+            </div>
+            <div class="items" v-if="noError">
                     <div class="item" id="forth-item">
                         <div class="item-img">
                             <img src ="img/4.jpeg"/>
