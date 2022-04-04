@@ -128,7 +128,7 @@ def add_to_cart():
                 {
                     "code": 500,
                     "data": {},
-                    "message": "An error occured creating the cart"
+                    "message": "An error occurred creating the cart"
                 }
             ), 500
     return jsonify(
