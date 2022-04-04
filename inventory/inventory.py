@@ -51,7 +51,7 @@ def get_all():
                 },
                 "message": "all items retrieved"
             }
-        )
+        ), 200
     return jsonify(
         {
             "code": 500,
