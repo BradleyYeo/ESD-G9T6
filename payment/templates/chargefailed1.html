@@ -120,55 +120,12 @@
 
     <div id="hero">
         <div id="header">
-            <h1>Your Payment has been<br>Confirmed!</h1>
-            <!-- <a href="http://localhost/ESD/ESD-G9T6/front_end/landing_page.html">Click here to continue shopping!</a> Need to check if works -->
-            <a onclick="checkout()">Click here to continue shopping!</a> <!-- Need to check if works-->
+            <h1>Your Payment has failed. <br> Please Try Again <br> Invalid Payload </h1>
+            <a href="http://localhost/ESD/ESD-G9T6/front_end/landing_page.html">Click here to continue shopping!</a> <!-- Need to check if works-->
 
         </div>
 
     </div>
-
-    <script>
-        function checkout() {
-            $(async() => {           
-            // Change serviceURL to your own
-            var serviceURL = "http://localhost:5000/cart/remove_all/1";
-            var customerData = ({
-                "customer_id": 123456,
-                "customer_email": "abc@abc"
-            });
-
-            try {
-                const config = {
-                    method: 'PUT',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(customerData)
-                }
-                const response = await fetch(serviceURL, config)
-
-                const result = await response.json();
-                    if (response.status === 200) {
-                        //success
-                        console.log("success")
-                    } else if (response.status == 400) {
-                        //not success
-                        console.log("failure")
-                    } else {
-                        // unexpected outcome, throw the error
-                        throw response.status;
-                    }
-                } catch (error) {
-                    // Errors when calling the service; such as network error, 
-                    // service offline, etc
-                    console.log
-                        ('There is a problem checking out, please try again later.<br />' + error);
-                                } // error
-                        });
-        }
-    </script>
 
 </body>
 </html>

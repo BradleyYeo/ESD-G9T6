@@ -11,4 +11,4 @@ services:
     environment:
       PYTHONUNBUFFERED: 1
     ports:
-      - "5000:5069"
+      - "5069:5069"
