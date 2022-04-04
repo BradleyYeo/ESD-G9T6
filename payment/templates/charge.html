@@ -123,7 +123,7 @@
             <h1>Your Payment has been<br>Confirmed!</h1>
             <!-- <a href="http://localhost/ESD/ESD-G9T6/front_end/landing_page.html">Click here to continue shopping!</a> Need to check if works -->
             <a onclick="checkout()">Click here to continue shopping!</a> <!-- Need to check if works-->
-
+            <!-- technically checkout() should be called ONLOAD rather than onclick! the button is just to redirect back to homepage-->
         </div>
 
     </div>
@@ -134,8 +134,8 @@
             // Change serviceURL to your own
             var serviceURL = "http://localhost:5000/cart/remove_all/1";
             var customerData = ({
-                "customer_id": 123456,
-                "customer_email": "abc@abc"
+                "customer_id": 1,
+                "customer_email": "tianyu.chen.2020@smu.edu.sg"
             });
 
             try {
