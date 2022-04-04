@@ -157,11 +157,11 @@ header("Access-Control-Allow-Origin: *");
     <div id="app">
     <nav>
         <div class="nav-left">
-            <a href="landing_page.php" class="nav-link">HOME</a>
+            <a href="landing_page.html" class="nav-link">HOME</a>
             <a href="items.html" class="nav-link">ITEMS</a>
         </div>
         <div class="nav-brand">
-            <a href="landing_page.php"><span style="color: var(--blue); font-style: italic;">BLUE</span>MART</a>
+            <a href="landing_page.html"><span style="color: var(--blue); font-style: italic;">BLUE</span>MART</a>
         </div>
         <div class="nav-right">
         <div class="nav-link" id="login-sign-up">LOGIN/SIGN UP</div>
@@ -173,36 +173,83 @@ header("Access-Control-Allow-Origin: *");
         <div id="all-items">
             <p class="title">All Items<p>
             <div class="items" v-if="noError">
-                <div class="item" id="first-item">
-                    <div class="item-img">
-                        <img src ="img/1.webp"/>
+                <!-- v-for to loop through the items  -->
+                <!-- <div v-for='(item, index) in items'>
+                    <div class="item">
+                        <div class="item-img" v-bind:id='productId'>
+                            <img v-bind:src='imgArr[index]'>
+                        </div>
+                            <h3 v-bind:value='item.product_name'> Item: {{item.product_name}} </h3> 
+                            <p v-bind:value='item.price'> Price: {{item.price}} cents</p>
+                            <p> Product ID: {{item.product_id}}</p>
+                            <p id="productId"> Quantity Available:{{item.quantity}}</p> 
+                            <button v-on:click="addedFirstItem" type="button" class="button" id="button1">Add to Cart!</button>
+                    </div> -->
+
+                    <div class="item" id="first-item">
+                        <div class="item-img">
+                            <img src ="img/1.webp"/>
+                        </div>
+                            <h3> Item: {{firstProductName}} </h3> 
+                            <p> Price: {{firstPrice}} cents</p>
+                            <p> Product ID: {{firstProductId}}</p>
+                            <p id="firstQuantity"> Quantity Available:{{firstQuantity}}</p> 
+                            <button v-on:click="addedFirstItem" type="button" class="button" id="button1">Add to Cart!</button>
                     </div>
-                        <h3> Item: {{firstProductName}} </h3> 
-                        <p> Price: {{firstPrice}} cents</p>
-                        <p> Product ID: {{firstProductId}}</p>
-                        <p id="firstQuantity"> Quantity Available:{{firstQuantity}}</p> 
-                        <button v-on:click="addedFirstItem" type="button" class="button" id="button1">Add to Cart!</button>
-                </div>
-                <div class="item" id="second-item">
-                    <div class="item-img">
-                        <img src ="img/2.webp"/>
+                    <div class="item" id="second-item">
+                        <div class="item-img">
+                            <img src ="img/2.webp"/>
+                        </div>
+                            <h3> Item: {{secondProductName}} </h3> 
+                            <p> Price: {{secondPrice}} cents</p>
+                            <p> Product ID: {{secondProductId}}</p>
+                            <p id="firstQuantity"> Quantity Available:{{secondQuantity}}</p> 
+                            <button v-on:click="addedSecondItem" type="button" class="button" id="button2">Add to Cart!</button>
                     </div>
-                        <h3> Item: {{secondProductName}} </h3> 
-                        <p> Price: {{secondPrice}} cents</p>
-                        <p> Product ID: {{secondProductId}}</p>
-                        <p id="firstQuantity"> Quantity Available:{{secondQuantity}}</p> 
-                        <button v-on:click="addedSecondItem" type="button" class="button" id="button2">Add to Cart!</button>
-                </div>
-                <div class="item" id="third-item">
-                    <div class="item-img">
-                        <img src ="img/3.webp"/>
+                    <div class="item" id="third-item">
+                        <div class="item-img">
+                            <img src ="img/3.webp"/>
+                        </div>
+                            <h3> Item: {{thirdProductName}} </h3> 
+                            <p> Price: {{thirdPrice}} cents</p>
+                            <p> Product ID: {{thirdProductId}}</p>
+                            <p id="firstQuantity"> Quantity Available:{{thirdQuantity}}</p> 
+                            <button v-on:click="addedThirdItem" type="button" class="button" id="button3">Add to Cart!</button>
                     </div>
-                        <h3> Item: {{thirdProductName}} </h3> 
-                        <p> Price: {{thirdPrice}} cents</p>
-                        <p> Product ID: {{thirdProductId}}</p>
-                        <p id="firstQuantity"> Quantity Available:{{thirdQuantity}}</p> 
-                        <button v-on:click="addedThirdItem" type="button" class="button" id="button3">Add to Cart!</button>
-                </div>
+            </div>
+            <div class="items" v-if="noError">
+                    <div class="item" id="forth-item">
+                        <div class="item-img">
+                            <img src ="img/4.jpeg"/>
+                        </div>
+                            <h3> Item: {{forthProductName}} </h3> 
+                            <p> Price: {{forthPrice}} cents</p>
+                            <p> Product ID: {{forthProductId}}</p>
+                            <p id="forthQuantity"> Quantity Available:{{forthQuantity}}</p> 
+                            <button v-on:click="addedForthItem" type="button" class="button" id="button4">Add to Cart!</button>
+                    </div>
+                    <div class="item" id="fifth-item">
+                        <div class="item-img">
+                            <img src ="img/5.jpeg"/>
+                        </div>
+                            <h3> Item: {{fifthProductName}} </h3> 
+                            <p> Price: {{fifthPrice}} cents</p>
+                            <p> Product ID: {{fifthProductId}}</p>
+                            <p id="fifthQuantity"> Quantity Available:{{fifthQuantity}}</p> 
+                            <button v-on:click="addedFifthItem" type="button" class="button" id="button5">Add to Cart!</button>
+                    </div>
+                    <div class="item" id="sixth-item">
+                        <div class="item-img">
+                            <img src ="img/6.webp"/>
+                        </div>
+                            <h3> Item: {{sixthProductName}} </h3> 
+                            <p> Price: {{sixthPrice}} cents</p>
+                            <p> Product ID: {{sixthProductId}}</p>
+                            <p id="sixthQuantity"> Quantity Available:{{sixthQuantity}}</p> 
+                            <button v-on:click="addedSixthItem" type="button" class="button" id="button6">Add to Cart!</button>
+                    </div>
+                <!-- </div> -->
+                <!-- end of v-for  -->
             </div>
             <div v-else>There is something wrong, please try again later</div>
         </div>
@@ -217,8 +264,17 @@ header("Access-Control-Allow-Origin: *");
         const app = Vue.createApp({
             data(){
                 return{
+                    //items : [],
+                    item : '',
                     items : [],
+
                     cartItems : [],
+                    Item : '',
+                    // productName : '',
+                    // price : '',
+                    // productId : '',
+                    // quantity : '',
+                    //imgArr : ['img/1.webp',"img/2.webp", "img/3.webp", "img/4.webp", "img/5.webp", "img/6.webp"],
                     firstItem : '',
                     firstProductName : '',
                     firstPrice : '',
@@ -239,9 +295,119 @@ header("Access-Control-Allow-Origin: *");
                     thirdProductId : '',
                     thirdProductName : '',
                     thirdQuantity : '',
+                    forthItem : '',
+                    forthPrice : '',
+                    forthProductId : '',
+                    forthProductName : '',
+                    forthQuantity : '',
+                    fifthItem : '',
+                    fifthPrice : '',
+                    fifthProductId : '',
+                    fifthProductName : '',
+                    fifthQuantity : '',
+                    sixthItem : '',
+                    sixthPrice : '',
+                    sixthProductId : '',
+                    sixthProductName : '',
+                    sixthQuantity : '',
                 }
             },
             methods : {
+                getAllInventoryItems(){
+                    const response =
+                        fetch(`${get_all_URL}/all`)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(response);
+                                if (data.code === 404) {
+                                    // no book in db
+                                    this.message = data.message;
+                                } else {
+                                    this.items = data.data.items;
+                                    // this.items =  [
+                                    // {
+                                    //     "price": 400, 
+                                    //     "product_id": 1, 
+                                    //     "product_name": "apple", 
+                                    //     "quantity": 0
+                                    // }, 
+                                    // {
+                                    //     "price": 300, 
+                                    //     "product_id": 2, 
+                                    //     "product_name": "banana", 
+                                    //     "quantity": 0
+                                    // }, 
+                                    // {
+                                    //     "price": 500, 
+                                    //     "product_id": 3, 
+                                    //     "product_name": "pineapple", 
+                                    //     "quantity": 2
+                                    // },
+                                    // {
+                                    //     "price": 400, 
+                                    //     "product_id": 4, 
+                                    //     "product_name": "orange", 
+                                    //     "quantity": 0
+                                    // }, 
+                                    // {
+                                    //     "price": 300, 
+                                    //     "product_id": 5, 
+                                    //     "product_name": "pear", 
+                                    //     "quantity": 0
+                                    // }, 
+                                    // {
+                                    //     "price": 500, 
+                                    //     "product_id": 6, 
+                                    //     "product_name": "grapes", 
+                                    //     "quantity": 2
+                                    // }
+                                    // ];
+
+                                    this.firstItem = this.items[0];
+                                    this.firstProductName = this.firstItem.product_name
+                                    this.firstProductId = this.firstItem.product_id
+                                    this.firstPrice = this.firstItem.price
+                                    this.firstQuantity = this.firstItem.quantity
+                                    //console.log(this.firstProductName);
+
+                                    this.secondItem = this.items[1];
+                                    this.secondPrice = this.secondItem.price
+                                    this.secondProductId = this.secondItem.product_id
+                                    this.secondProductName = this.secondItem.product_name
+                                    this.secondQuantity = this.secondItem.quantity
+
+                                    this.thirdItem = this.items[2];
+                                    this.thirdPrice = this.thirdItem.price
+                                    this.thirdProductId = this.thirdItem.product_id
+                                    this.thirdProductName = this.thirdItem.product_name
+                                    this.thirdQuantity = this.thirdItem.quantity
+
+                                    this.forthItem = this.items[3];
+                                    this.forthPrice = this.forthItem.price
+                                    this.forthProductId = this.forthItem.product_id
+                                    this.forthProductName = this.forthItem.product_name
+                                    this.forthQuantity = this.forthItem.quantity
+
+                                    this.fifthItem = this.items[4];
+                                    this.fifthPrice = this.fifthItem.price
+                                    this.fifthProductId = this.fifthItem.product_id
+                                    this.fifthProductName = this.fifthItem.product_name
+                                    this.fifthQuantity = this.fifthItem.quantity
+
+                                    this.sixthItem = this.items[5];
+                                    this.sixthPrice = this.sixthItem.price
+                                    this.sixthProductId = this.sixthItem.product_id
+                                    this.sixthProductName = this.sixthItem.product_name
+                                    this.sixthQuantity = this.sixthItem.quantity
+                                }
+                            })
+                            .catch(error => {
+                                // Errors when calling the service; such as network error, 
+                                // service offline, etc
+                                console.log(this.message + error);
+
+                            });
+                },
                 addedFirstItem(){
                     this.cartNum ++;
                     let jsonData = JSON.stringify({
@@ -425,6 +591,144 @@ header("Access-Control-Allow-Origin: *");
                             }
                         })
                 },
+                addedForthItem(){
+                    this.cartNum ++;
+                    let jsonData = JSON.stringify({
+                        "cart": [
+                            {
+                            "price": 100,
+                            "product_id": 4,
+                            "product_name": "orange",
+                            "quantity": 1,
+                            "add": false
+                            }
+                        ]
+                    });
+
+                    fetch(`${get_all_URL}/update`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-type": "application/json"
+                            },
+                            body: jsonData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            result = data.data;
+                            console.log(result);
+                            // 3 cases
+                            switch (data.code) {
+                                case 201:
+                                    this.noError = true;
+                                    // refresh inventory
+                                    this.getAllInventoryItems();
+
+                                    // an alternate way is to add this one element into this.books
+                                    break;
+                                case 400:
+                                case 500:
+                                    this.noError = false;
+                                    this.noError = data.message;
+                                    break;
+                                default:
+                                    throw `${data.code}: ${data.message}`;
+                            }
+                        })
+                },
+                addedFifthItem(){
+                    this.cartNum ++;
+                    let jsonData = JSON.stringify({
+                        "cart": [
+                            {
+                            "price": 110,
+                            "product_id": 5,
+                            "product_name": "pear",
+                            "quantity": 1,
+                            "add": false
+                            }
+                        ]
+                    });
+
+                    fetch(`${get_all_URL}/update`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-type": "application/json"
+                            },
+                            body: jsonData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            result = data.data;
+                            console.log(result);
+                            // 3 cases
+                            switch (data.code) {
+                                case 201:
+                                    this.noError = true;
+                                    // refresh inventory
+                                    this.getAllInventoryItems();
+
+                                    // an alternate way is to add this one element into this.books
+                                    break;
+                                case 400:
+                                case 500:
+                                    this.noError = false;
+                                    this.noError = data.message;
+                                    break;
+                                default:
+                                    throw `${data.code}: ${data.message}`;
+                            }
+                        })
+                },
+                addedSixthItem(){
+                    this.cartNum ++;
+                    let jsonData = JSON.stringify({
+                        "cart": [
+                            {
+                            "price": 500,
+                            "product_id": 6,
+                            "product_name": "grapes",
+                            "quantity": 1,
+                            "add": false
+                            }
+                        ]
+                    });
+
+                    fetch(`${get_all_URL}/update`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-type": "application/json"
+                            },
+                            body: jsonData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            result = data.data;
+                            console.log(result);
+                            // 3 cases
+                            switch (data.code) {
+                                case 201:
+                                    this.noError = true;
+                                    // refresh inventory
+                                    this.getAllInventoryItems();
+
+                                    // an alternate way is to add this one element into this.books
+                                    break;
+                                case 400:
+                                case 500:
+                                    this.noError = false;
+                                    this.noError = data.message;
+                                    break;
+                                default:
+                                    throw `${data.code}: ${data.message}`;
+                            }
+                        })
+                },
                 // checkout(){
                 //     let jsonData = JSON.stringify({
                 //         "customer_id": 123456,
@@ -463,74 +767,8 @@ header("Access-Control-Allow-Origin: *");
                 //                 throw `${data.code}: ${data.message}`;
                 //         }
                 //     })
-                // },
-                // getAllCart(){
-                //     const response =
-                //         fetch(cart_URL)
-                //             .then(response => response.json())
-                //             .then(data => {
-                //                 console.log(response);
-                //                 if (data.code === 404) {
-                //                     // no book in db
-                //                     this.message = data.message;
-                //                 } else {
-                //                     this.cartItems = data.data.carts;
-                //                     // this.firstItem = this.items[0];
-                //                     this.firstCartProductName = this.cartItems[0].product_name
-                //                     // this.firstProductId = this.firstItem.product_id
-                //                     // this.firstPrice = this.firstItem.price
-                //                     // this.firstQuantity = this.firstItem.quantity
-                //                     //console.log(this.firstProductName);
-
-                //                     this.haveCart = true;
-                //                 }
-                //             })
-                //             .catch(error => {
-                //                 // Errors when calling the service; such as network error, 
-                //                 // service offline, etc
-                //                 console.log(this.message + error);
-
-                //             });
-                // },
-                getAllInventoryItems(){
-                    const response =
-                        fetch(`${get_all_URL}/all`)
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log(response);
-                                if (data.code === 404) {
-                                    // no book in db
-                                    this.message = data.message;
-                                } else {
-                                    this.items = data.data.items;
-
-                                    this.firstItem = this.items[0];
-                                    this.firstProductName = this.firstItem.product_name
-                                    this.firstProductId = this.firstItem.product_id
-                                    this.firstPrice = this.firstItem.price
-                                    this.firstQuantity = this.firstItem.quantity
-                                    //console.log(this.firstProductName);
-
-                                    this.secondItem = this.items[1];
-                                    this.secondPrice = this.secondItem.price
-                                    this.secondProductId = this.secondItem.product_id
-                                    this.secondProductName = this.secondItem.product_name
-                                    this.secondQuantity = this.secondItem.quantity
-
-                                    this.thirdItem = this.items[2];
-                                    this.thirdPrice = this.thirdItem.price
-                                    this.thirdProductId = this.thirdItem.product_id
-                                    this.thirdProductName = this.thirdItem.product_name
-                                    this.thirdQuantity = this.thirdItem.quantity
-                                }
-                            })
-                            .catch(error => {
-                                // Errors when calling the service; such as network error, 
-                                // service offline, etc
-                                console.log(this.message + error);
-
-                            });
-                }
+                // }
+               
             },
             created(){
                 this.getAllInventoryItems();
@@ -725,136 +963,7 @@ header("Access-Control-Allow-Origin: *");
     </script>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
-    <!-- // function addedFirstItem(){
-    //     //testing if the button is working
-    //     var info = 'added'
-    //     $('#added-items').append(info)
-
-    // }
-    
-
-    // // Helper function to display error message
-    // function showError(message) {
-    //     // Hide the table and button in the event of error
-    //     $('.items').hide();
-    //     // $('#addBookBtn').hide();
- 
-    //     // Display an error under the main container
-    //     $('#hero')
-    //         .append("<label>"+message+"</label>");
-    // }
-
-    // //anonymous async function 
-    // //- using await requires the function that calls it to be async
-    // $(async() => {           
-    //     // Change serviceURL to your own
-    //     var serviceURL = "http://192.168.1.2:5552/inventory/all";
- 
-    //     try {
-    //         const response =
-    //          await fetch(
-    //            serviceURL, { method: 'GET' }
-    //         );
-    //         const result = await response.json();
-    //          if (response.status === 200) {
-    //             // success case
-    //             var items = result.data.items; //the array is in items within data of 
-    //                                            // the returned result
-                   
-    //             var firstItem = items[0]
-    //             var firstPrice = firstItem['price']
-    //             var firstProductId = firstItem['product_id']
-    //             var firstProductName = firstItem['product_name']
-    //             var firstQuantity = firstItem['quantity']
-    //             var firstImage = 'img/1.webp'
-
-    //                 var firstInfo = '<div><img src =" '+ firstImage +               '"width="150" height="100" /></div>' +
-    //                             '<h3> Item: ' + firstProductName + '</h3>' + 
-    //                             '<p> Price: ' + firstPrice + '</p>' + 
-    //                             '<p> Product ID: ' + firstProductId + '</p>' + 
-    //                             '<p id="firstQuantity"> Quantity Available: ' + firstQuantity + '</p>' + 
-    //                             '<button onclick="addedFirstItem()" type="button" class="button" id="button1">Add to Cart!</button></a>'
-    //             $('#first-item').append(firstInfo)
-                
-    //             var secondItem = items[1]
-    //             var secondPrice = secondItem['price']
-    //             var secondProductId = secondItem['product_id']
-    //             var secondProductName = secondItem['product_name']
-    //             var secondQuantity = secondItem['quantity']
-    //             var secondImage = 'img/2.jpeg'
-
-    //                 var secondInfo = '<div><img src =" '+ secondImage + '" width="150" height="100" /></div>' +
-    //                             '<h3> Item: ' + secondProductName + '</h3>' + 
-    //                             '<p> Price: ' + secondPrice + '</p>' + 
-    //                             '<p> Product ID: ' + secondProductId + '</p>' + 
-    //                             '<p> Quantity Available: ' + secondQuantity + '</p>' + 
-    //                             '<button type="button" class="button" id="button2">Add to Cart!</button>'
-    //             $('#second-item').append(secondInfo)
-
-    //             var thirdItem = items[2]
-    //             var thirdPrice = thirdItem['price']
-    //             var thirdProductId = thirdItem['product_id']
-    //             var thirdProductName = thirdItem['product_name']
-    //             var thirdQuantity = thirdItem['quantity']
-    //             var thirdImage = 'img/3.webp'
-
-    //     var thirdInfo = '<div><img src =" '+ thirdImage + '" width="150" height="100" /></div>' +
-    //                             '<h3> Item: ' + thirdProductName + '</h3>' + 
-    //                             '<p> Price: ' + thirdPrice + '</p>' + 
-    //                             '<p> Product ID: ' + thirdProductId + '</p>' + 
-    //                             '<p> Quantity Available: ' + thirdQuantity + '</p>' + 
-    //                             '<button type="button" class="button" id="button3">Add to Cart!</button>'
-    //             $('#third-item').append(thirdInfo)
-
-
-    //             } else if (response.status == 404) {
-    //                 // No items
-    //                 showError(result.message);
-    //             } else {
-    //                 // unexpected outcome, throw the error
-    //                 throw response.status;
-    //             }
-    //         } catch (error) {
-    //             // Errors when calling the service; such as network error, 
-    //             // service offline, etc
-    //             showError
-    // ('There is a problem retrieving grocery items data, please try again later.<br />' + error);
-    //         } // error
-    // });
-
-    // $('#button1').click(async (event) => {
-    //     event.preventDefault();
-
-    //     let serviceURL = 'http://192.168.1.2:5552/inventory/update';
-
-    //     let firstQuantity = $('#firstQuantity').val();
-    //     try {
-    //             const response =
-    //                 await fetch(
-    //                     serviceURL, {
-    //                     method: 'POST',
-    //                     headers: { "Content-Type": "application/json" },
-    //                     body: JSON.stringify({ title: title, price: price, quantity: firstQuantity })
-    //                 });
-    //             const data = await response.json();
-
-    //             if (response.ok) {
-    //                 // relocate to home page
-    //                 window.location.replace("items.html");
-    //                 return false;
-    //             } else {
-    //                 console.log(data);
-    //                 showError(data.message);
-    //             }
-    //         } catch (error) {
-    //             // Errors when calling the service; such as network error, 
-    //             // service offline, etc
-    //             showError
-    //                 ("There is a problem adding this book, please try again later. " + error);
-
-    //         } // error
-
-    // }) -->
+   
 
 
 </script>
