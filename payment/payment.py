@@ -1,10 +1,10 @@
 # flask server that renders the checkout.html file we created in the templates directory of the root folder.
-from multiprocessing.sharedctypes import Value
-from flask import Flask, render_template, request, jsonify, redirect
-import requests
 import os
+
 import stripe
-from dotenv import load_dotenv #this is to load the environment variables from the .env file!
+from dotenv import load_dotenv  # this is to load the environment variables from the .env file!
+from flask import Flask, render_template, request, redirect
+
 load_dotenv()
 
 from flask_cors import CORS
@@ -21,6 +21,7 @@ stripe_keys = {
 
 stripe.api_key = stripe_keys["secret_key"]
 
+
 #############homepage where checkout button is shown#############
 # this should be redirected from the UI when the "checkout/payment button is clicked first"
 
@@ -33,7 +34,8 @@ def checkout():
     total_price = 10000
     customer_id = 1
     customer_email = "tianyu.chen.2020@.smu.edu.sg"
-    return render_template('checkout.html',key=stripe_keys['publishable_key']) #this is the old one without passing data
+    return render_template('checkout.html',
+                           key=stripe_keys['publishable_key'])  # this is the old one without passing data
     # return render_template('checkout.html',key=stripe_keys['publishable_key'], total_price=total_price, customer_email=customer_email, customer_id=customer_id)
 
 
@@ -44,7 +46,7 @@ def charge():
     # data = request.get_json()
     # total_price = data["total_price"]
 
-    amount = 1000 # Amount in cents #currently hardcoded
+    amount = 1000  # Amount in cents #currently hardcoded
 
     customer = stripe.Customer.create(
         email='customer@example.com',
@@ -59,7 +61,9 @@ def charge():
     )
 
     # redirects user to the payment success page
-    return render_template('charge.html', amount=amount) 
+    return render_template('charge.html', amount=amount)
+
+
 ###############webhook to confirm payment###############
 @app.route("/webhook", methods=["POST"])
 def stripe_webhook():
@@ -71,7 +75,7 @@ def stripe_webhook():
             payload, sig_header, stripe_keys["endpoint_secret"]
         )
     except ValueError as e:
-        #invalid payload
+        # invalid payload
         # return "Invalid payload", 400 # this is the original one
         ### ignore the jsonify return first since it seems to be returning somewhere else
         # return jsonify(
@@ -94,16 +98,16 @@ def stripe_webhook():
         #         "message": "Payment Failed, Invalid Signature"
         #     }
         # )
-        return render_template('chargefailed2.html', amount=amount) 
+        return render_template('chargefailed2.html', amount=amount)
 
-    # Handle the checkout.session.completed event
+        # Handle the checkout.session.completed event
 
     ### the two lines below are from the other version of stripe's API, so "checkout.session.completed doesn't work" replace with charge.succeeded
     # if event["type"] == "checkout.session.completed":
     #     print("Payment was successful123")
 
     if event["type"] == "charge.succeeded":
-        print("Payment Charge Confirmed") #as long as this prints, the webhook is working properly. 
+        print("Payment Charge Confirmed")  # as long as this prints, the webhook is working properly.
         ### ignore the jsonify return first since it seems to be returning somewhere else
         # return jsonify(
         #     {
@@ -112,9 +116,8 @@ def stripe_webhook():
         #         "message": "Payment Successful"
         #     }
         # )
-        #let me try to redirect to payment complex MS here / redirect back to UI which will call checkout complex MS
-        return redirect(f"/checkout") #trying to redirect to complex #try if it works
-
+        # let me try to redirect to payment complex MS here / redirect back to UI which will call checkout complex MS
+        return redirect(f"/checkout")  # trying to redirect to complex #try if it works
 
     # return jsonify(
     #     {
@@ -123,6 +126,7 @@ def stripe_webhook():
     #         "message": "Payment Successful"
     #     }
     # )
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5069, debug=True)

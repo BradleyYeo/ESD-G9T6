@@ -2,13 +2,14 @@
 # # The above shebang (#!) operator tells Unix-like environments
 # # to run this file as a python3 script
 
+import json
 import os
-from flask import Flask, request, jsonify
+
+import pika
+from flask import Flask, jsonify
 from flask_cors import CORS
 
 import amqp_setup
-import pika
-import json
 
 app = Flask(__name__)
 CORS(app)
@@ -16,7 +17,6 @@ CORS(app)
 
 @app.route("/test", methods=['GET'])
 def get_customer_cart():
-
     customer_id = 43
     customer_email = 'tianyu.chen.2020@smu.edu.sg'
     cart_items = [{
@@ -25,18 +25,17 @@ def get_customer_cart():
         "product_name": "apple",
         "quantity": 2
     },
-    {
-        "price": 256,
-        "product_id": 2,
-        "product_name": "banana",
-        "quantity": 1
-    }]
+        {
+            "price": 256,
+            "product_id": 2,
+            "product_name": "banana",
+            "quantity": 1
+        }]
     try:
         publish_receipt(customer_id, customer_email, cart_items)
         return jsonify({"code": 200}), 200
     except:
         return jsonify({"code": 400}), 400
-
 
 
 def publish_receipt(customer_id, customer_email, cart_items):
@@ -54,7 +53,7 @@ def publish_receipt(customer_id, customer_email, cart_items):
     print(str(message))
     message = json.dumps(message)
     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="#",
-                    body=message, properties=pika.BasicProperties(delivery_mode=2))
+                                     body=message, properties=pika.BasicProperties(delivery_mode=2))
 
 
 # execute this program only if it is run as a script (not by 'import')

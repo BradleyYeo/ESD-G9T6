@@ -121,7 +121,8 @@ def reduce_inventory():
             }
         ), 500
 
-#not tested with complex
+
+# not tested with complex
 @app.route("/inventory/add", methods=["PUT"])
 def add_inventory():
     data = request.get_json()
