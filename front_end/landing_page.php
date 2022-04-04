@@ -4,6 +4,7 @@ header("Access-Control-Allow-Origin: *");
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,57 +20,57 @@ header("Access-Control-Allow-Origin: *");
     <script src="https://kit.fontawesome.com/032ebf9261.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
+
 <body>
     <!-- FOR FACEBOOK LOGIN -->
     <script>
         window.fbAsyncInit = function() {
             FB.init({
-                appId            : '936734707042298',
-                autoLogAppEvents : true,
-                xfbml            : true,
-                version          : 'v13.0'
+                appId: '936734707042298',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v13.0'
             });
         };
     </script>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
-    
-    
+
+
     <script>
-    
-        function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
+        function statusChangeCallback(response) { // Called with the results from FB.getLoginStatus().
             console.log('statusChangeCallback');
-            console.log(response);                   // The current login status of the person.
-            if (response.status === 'connected') {   // Logged into your webpage and Facebook.
+            console.log(response); // The current login status of the person.
+            if (response.status === 'connected') { // Logged into your webpage and Facebook.
                 testAPI();
-            } else {                                 // Not logged into your webpage or we are unable to tell.
+            } else { // Not logged into your webpage or we are unable to tell.
                 document.getElementById('status').innerHTML = 'Please log ' +
                     'into this webpage.';
             }
         }
-    
-    
-        function checkLoginState() {               // Called when a person is finished with the Login Button.
-            FB.getLoginStatus(function(response) {   // See the onlogin handler
+
+
+        function checkLoginState() { // Called when a person is finished with the Login Button.
+            FB.getLoginStatus(function(response) { // See the onlogin handler
                 statusChangeCallback(response);
             });
         }
-    
-    
+
+
         window.fbAsyncInit = function() {
             FB.init({
-                appId      : '936734707042298',
-                cookie     : true,                     // Enable cookies to allow the server to access the session.
-                xfbml      : true,                     // Parse social plugins on this webpage.
-                version    : '13.0'           // Use this Graph API version for this call.
+                appId: '936734707042298',
+                cookie: true, // Enable cookies to allow the server to access the session.
+                xfbml: true, // Parse social plugins on this webpage.
+                version: '13.0' // Use this Graph API version for this call.
             });
-    
-    
-            FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
-                statusChangeCallback(response);        // Returns the login status.
+
+
+            FB.getLoginStatus(function(response) { // Called after the JS SDK has been initialized.
+                statusChangeCallback(response); // Returns the login status.
             });
         };
-    
-        function testAPI() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+
+        function testAPI() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
             console.log('Welcome!  Fetching your information.... ');
             FB.api('/me', function(response) {
                 console.log('Successful login for: ' + response.name);
@@ -77,21 +78,20 @@ header("Access-Control-Allow-Origin: *");
                     'Thanks for logging in, ' + response.name + '!';
             });
         }
-    
     </script>
     <!-- FOR FACEBOOK LOGIN END -->
 
     <!-- CART -->
     <div id="cart">
         <!-- MAKE SURE TO MAKE THE REST OF THE PAGE UNSCROLLABLE WHEN CART IS OPEN -->
-        
+
         <div class="top-row">
             <img src="img/angle-left-solid.svg" alt="" class="close">
             <div id="title">CART</div>
         </div>
 
         <div id="cart-items">
-            
+
         </div>
 
 
@@ -121,7 +121,7 @@ header("Access-Control-Allow-Origin: *");
     <!-- LOGIN MODAL -->
     <div id="modal">
         <div id="modal-content">
-            <div class="top"><img src="img/xmark-solid.svg" id="modal-close"></div>   
+            <div class="top"><img src="img/xmark-solid.svg" id="modal-close"></div>
             <div class="title">Pardon the Interruption.</div>
             <p>
                 We see that you're not logged in.<br>
@@ -173,25 +173,25 @@ header("Access-Control-Allow-Origin: *");
     </div>
 
     <script>
-        $("#login-sign-up").click(function(){
+        $("#login-sign-up").click(function() {
             $("#modal").show(500);
         });
-        $("#modal-close").click(function(){
+        $("#modal-close").click(function() {
             $("#modal").hide(500);
             $('#login-sign-up').text('Victoria Lee');
         });
-        
 
 
-        $("#cart-button").click(function(){
+
+        $("#cart-button").click(function() {
             $("#cart").show(500);
             $('html, body').css({
                 overflow: 'hidden',
                 height: '100%'
             });
-            
+
         });
-        $(".close").click(function(){
+        $(".close").click(function() {
             $("#cart").hide(500);
             $('html, body').css({
                 overflow: 'auto',
@@ -203,141 +203,151 @@ header("Access-Control-Allow-Origin: *");
     <script>
         // anonymous async function 
         // - using await requires the function that calls it to be async
-        $(async() => {           
+        $(async () => {
             // Change serviceURL to your own
-            var serviceURL = "http://127.0.0.1:5000/cart/2";
+            var serviceURL = "http://127.0.0.1:5000/cart/1";
 
             try {
                 const response =
                     await fetch(
-                    serviceURL, { method: 'GET' }
-                );
+                        serviceURL, {
+                            method: 'GET'
+                        }
+                    );
                 const result = await response.json();
-                    if (response.status === 200) {
-                        // success case
-                        var cart = result.data.cart; //the array is in books within data of 
-                                                    // the returned result
-                        // for loop to setup all table rows with obtained book data
-                        var total_price = 0;
-                        var cart_num = cart.length;
-                        var rows = "";
-                        for (const item of cart) {
-                            // eachRow = "<div class='title'>"+ item.product_name + "</div>" +
-                            //         "<div class='details'>" + 
-                            //             "<div class='quantity'>" + item.quantity + "</div>" + 
-                            //             "<div class='price'>" + item.price + "</div>" + 
-                            //         "</div>"
-                            item_price = (item.price)/100;
-                            item_price = item_price * item.quantity;
-                            item_price = item_price.toFixed(2);
-                            total_price = Number(total_price) + Number(item_price);
-                            each_row = `
+                if (response.status === 200) {
+                    // success case
+                    var cart = result.data.cart; //the array is in books within data of 
+                    // the returned result
+                    // for loop to setup all table rows with obtained book data
+                    var total_price = 0;
+                    var cart_num = cart.length;
+                    var rows = "";
+                    for (const item of cart) {
+                        // eachRow = "<div class='title'>"+ item.product_name + "</div>" +
+                        //         "<div class='details'>" + 
+                        //             "<div class='quantity'>" + item.quantity + "</div>" + 
+                        //             "<div class='price'>" + item.price + "</div>" + 
+                        //         "</div>"
+                        item_price = (item.price) / 100;
+                        item_price = item_price * item.quantity;
+                        item_price = item_price.toFixed(2);
+                        total_price = Number(total_price) + Number(item_price);
+                        each_row = `
                                 <img class='cart-img' src='img/` + item.product_id + `.webp'>
                                 <div class='cart-details'>
-                                    <div class='cd-title'>` + item.product_name +`</div>
+                                    <div class='cd-title'>` + item.product_name + `</div>
                                     <div class='cd-others'>
                                         <div class='quantity'>Qty: ` + item.quantity + `</div>
                                         <div class='price'>$` + item_price + `</div>
                                     </div>
                                 </div>
                             `;
-                            rows += "<div class='cart-item'>" + each_row + "</div>";
-                        }
-                        // add all the rows to the table
-                        $('#cart-items').append(rows);
-                        
-                        total_price = Number(total_price) + Number(3.50);
-                        var subtotal = `<div class="price-text">$`+ total_price.toFixed(2) +`</div>`;
-                        $('#subtotal').append(subtotal);
+                        rows += "<div class='cart-item'>" + each_row + "</div>";
+                    }
+                    // add all the rows to the table
+                    $('#cart-items').append(rows);
 
-                        $('#cart_num').text(cart_num);
+                    total_price = Number(total_price) + Number(3.50);
+                    var subtotal = `<div class="price-text">$` + total_price.toFixed(2) + `</div>`;
+                    $('#subtotal').append(subtotal);
 
-                        $('#cart-items').css({
-                            overflow: 'scroll'
-                        })
-                    } else if (response.status == 400) {
-                        // No books
-                        console.log(result.message);
-                        noItemsMsg = `<div id="no-cart-items">
+                    $('#cart_num').text(cart_num);
+
+                    $('#cart-items').css({
+                        overflow: 'scroll'
+                    })
+                } else if (response.status == 400) {
+                    // No books
+                    console.log(result.message);
+                    noItemsMsg = `<div id="no-cart-items">
                             <div class="no-cart-items">Your Cart is Empty</div>
                             <a class="no-cart-items-btn" href="items.html">Shop for More</a>
                             </div>
                             `;
-                        $('#cart-items').append(noItemsMsg);
-                        $('#price').hide();
-                        $('#checkout-button').hide();
-                        $('#cart-items').css({
-                            height: '40px'
-                        })
-                    } else {
-                        // unexpected outcome, throw the error
-                        throw response.status;
-                    }
-                } catch (error) {
-                    // Errors when calling the service; such as network error, 
-                    // service offline, etc
-                    console.log
-        ('There is a problem retrieving cart data, please try again later.<br />' + error);
-                } // error
+                    $('#cart-items').append(noItemsMsg);
+                    $('#price').hide();
+                    $('#checkout-button').hide();
+                    $('#cart-items').css({
+                        height: '40px'
+                    })
+                } else {
+                    // unexpected outcome, throw the error
+                    throw response.status;
+                }
+            } catch (error) {
+                // Errors when calling the service; such as network error, 
+                // service offline, etc
+                console.log('There is a problem retrieving cart data, please try again later.<br />' + error);
+            } // error
         });
 
         function checkout() {
-            $(async() => {           
-            // Change serviceURL to your own
-            var serviceURL = "http://127.0.0.1:5550/checkout";
-            var customerData = ({
-                "customer_id": 1,
-                "customer_email": "tianyu.chen.2020@smu.edu.sg"
-            });
+            $(async () => {
+                // Change serviceURL to your own
+                var serviceURL = "http://127.0.0.1:5550/checkout";
+                var customerData = ({
+                    "customer_id": 1,
+                    "customer_email": "tianyu.chen.2020@smu.edu.sg"
+                });
 
-            try {
-                const config = {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(customerData)
-                }
-                const response = await fetch(serviceURL, config)
-                const result = await response.json();
+                try {
+                    const config = {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(customerData)
+                    }
+                    const response = await fetch(serviceURL, config)
+                    const result = await response.json();
                     if (response.status === 200) {
                         //success
                         $('checkout-button').hide();
                         $('payment-button').show();
                     } else {
                         //not success
-                        alert(response.message);
-                    } 
+                        message = result["message"]
+                        if (response.status === 500 && message == 'Not enough stock, cart updated to max stock') {
+                            alert(result["message"]);
+                            location.reload();
+                        } else if (response.status === 404 && message == 'Cart is empty.') {
+                            alert(result["message"]);
+                            location.reload();
+                        } else {
+                            alert(result["message"]);
+                            location.reload();
+                        }
+                    }
                 } catch (error) {
                     // Errors when calling the service; such as network error, 
                     // service offline, etc
-                    console.log
-                        ('There is a problem checking out, please try again later.<br />' + error);
-                                } // error
-                        });
+                    console.log('There is a problem checking out, please try again later.<br />' + error);
+                } // error
+            });
         }
 
         function payment() {
-            $(async() => {           
-            // Change serviceURL to your own
-            var serviceURL = "http://127.0.0.1:5069/payment";
-            var customerData = ({
-                "customer_id": 1,
-                "customer_email": "tianyu.chen.2020@smu.edu.sg"
-            });
+            $(async () => {
+                // Change serviceURL to your own
+                var serviceURL = "http://127.0.0.1:5069/payment";
+                var customerData = ({
+                    "customer_id": 1,
+                    "customer_email": "tianyu.chen.2020@smu.edu.sg"
+                });
 
-            try {
-                const config = {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(customerData)
-                }
-                const response = await fetch(serviceURL, config)
-                const result = await response.json();
+                try {
+                    const config = {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(customerData)
+                    }
+                    const response = await fetch(serviceURL, config)
+                    const result = await response.json();
                     if (response.status === 200) {
                         //success
                         $('checkout-button').hide();
@@ -349,12 +359,12 @@ header("Access-Control-Allow-Origin: *");
                 } catch (error) {
                     // Errors when calling the service; such as network error, 
                     // service offline, etc
-                    console.log
-                        ('There is a problem checking out, please try again later.<br />' + error);
-                                } // error
-                        });
+                    console.log('There is a problem checking out, please try again later.<br />' + error);
+                } // error
+            });
         }
     </script>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 </body>
+
 </html>
