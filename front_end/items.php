@@ -189,7 +189,7 @@ header("Access-Control-Allow-Origin: *");
                             <img src ="img/1.webp"/>
                         </div>
                             <h3> Item: {{firstProductName}} </h3> 
-                            <p> Price: {{firstPrice}} cents</p>
+                            <p> Price: ${{firstPrice}}.00 </p>
                             <p> Product ID: {{firstProductId}}</p>
                             <p id="firstQuantity"> Quantity Available:{{firstQuantity}}</p> 
                             <button v-on:click="addedFirstItem" type="button" class="button" id="button1">Add to Cart!</button>
@@ -199,7 +199,7 @@ header("Access-Control-Allow-Origin: *");
                             <img src ="img/2.webp"/>
                         </div>
                             <h3> Item: {{secondProductName}} </h3> 
-                            <p> Price: {{secondPrice}} cents</p>
+                            <p> Price: ${{secondPrice}}.00</p>
                             <p> Product ID: {{secondProductId}}</p>
                             <p id="firstQuantity"> Quantity Available:{{secondQuantity}}</p> 
                             <button v-on:click="addedSecondItem" type="button" class="button" id="button2">Add to Cart!</button>
@@ -209,7 +209,7 @@ header("Access-Control-Allow-Origin: *");
                             <img src ="img/3.webp"/>
                         </div>
                             <h3> Item: {{thirdProductName}} </h3> 
-                            <p> Price: {{thirdPrice}} cents</p>
+                            <p> Price: ${{thirdPrice}}.00</p>
                             <p> Product ID: {{thirdProductId}}</p>
                             <p id="firstQuantity"> Quantity Available:{{thirdQuantity}}</p> 
                             <button v-on:click="addedThirdItem" type="button" class="button" id="button3">Add to Cart!</button>
@@ -231,7 +231,7 @@ header("Access-Control-Allow-Origin: *");
                             <img src ="img/5.jpeg"/>
                         </div>
                             <h3> Item: {{fifthProductName}} </h3> 
-                            <p> Price: {{fifthPrice}} cents</p>
+                            <p> Price: ${{fifthPrice}}.00</p>
                             <p> Product ID: {{fifthProductId}}</p>
                             <p id="fifthQuantity"> Quantity Available:{{fifthQuantity}}</p> 
                             <button v-on:click="addedFifthItem" type="button" class="button" id="button5">Add to Cart!</button>
@@ -241,7 +241,7 @@ header("Access-Control-Allow-Origin: *");
                             <img src ="img/6.webp"/>
                         </div>
                             <h3> Item: {{sixthProductName}} </h3> 
-                            <p> Price: {{sixthPrice}} cents</p>
+                            <p> Price: ${{sixthPrice}}.00</p>
                             <p> Product ID: {{sixthProductId}}</p>
                             <p id="sixthQuantity"> Quantity Available:{{sixthQuantity}}</p> 
                             <button v-on:click="addedSixthItem" type="button" class="button" id="button6">Add to Cart!</button>
@@ -364,36 +364,36 @@ header("Access-Control-Allow-Origin: *");
                                     this.firstItem = this.items[0];
                                     this.firstProductName = this.firstItem.product_name
                                     this.firstProductId = this.firstItem.product_id
-                                    this.firstPrice = this.firstItem.price
+                                    this.firstPrice = Number(this.firstItem.price)/100
                                     this.firstQuantity = this.firstItem.quantity
                                     //console.log(this.firstProductName);
 
                                     this.secondItem = this.items[1];
-                                    this.secondPrice = this.secondItem.price
+                                    this.secondPrice = Number(this.secondItem.price)/100
                                     this.secondProductId = this.secondItem.product_id
                                     this.secondProductName = this.secondItem.product_name
                                     this.secondQuantity = this.secondItem.quantity
 
                                     this.thirdItem = this.items[2];
-                                    this.thirdPrice = this.thirdItem.price
+                                    this.thirdPrice = Number(this.thirdItem.price)/100
                                     this.thirdProductId = this.thirdItem.product_id
                                     this.thirdProductName = this.thirdItem.product_name
                                     this.thirdQuantity = this.thirdItem.quantity
 
                                     this.forthItem = this.items[3];
-                                    this.forthPrice = this.forthItem.price
+                                    this.forthPrice = Number(this.forthItem.price)/100
                                     this.forthProductId = this.forthItem.product_id
                                     this.forthProductName = this.forthItem.product_name
                                     this.forthQuantity = this.forthItem.quantity
 
                                     this.fifthItem = this.items[4];
-                                    this.fifthPrice = this.fifthItem.price
+                                    this.fifthPrice = Number(this.fifthItem.price)/100
                                     this.fifthProductId = this.fifthItem.product_id
                                     this.fifthProductName = this.fifthItem.product_name
                                     this.fifthQuantity = this.fifthItem.quantity
 
                                     this.sixthItem = this.items[5];
-                                    this.sixthPrice = this.sixthItem.price
+                                    this.sixthPrice = Number(this.sixthItem.price)/100
                                     this.sixthProductId = this.sixthItem.product_id
                                     this.sixthProductName = this.sixthItem.product_name
                                     this.sixthQuantity = this.sixthItem.quantity
