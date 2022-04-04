@@ -86,11 +86,29 @@ def add_to_cart():
     data = request.get_json()
     dbitem = Cart.query.filter_by(customer_id=data['customer_id'], product_id=data['product_id']).first()
 
+    if data['quantity'] == 0:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {},
+                "message": "Sorry we are out of stock!"
+            }
+        ), 500
+
     # if item is already in cart
     if dbitem:
         try:
-            dbitem.quantity += 1
-            db.session.commit()
+            if data['quantity'] <= dbitem.quantity:
+                return jsonify(
+                    {
+                        "code": 500,
+                        "data": {},
+                        "message": "Maximum inventory in cart!"
+                    }
+                ), 500
+            else:
+                dbitem.quantity += 1
+                db.session.commit()
         except Exception as e:
             return jsonify(
                 {

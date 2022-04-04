@@ -440,11 +440,17 @@ header("Access-Control-Allow-Origin: *");
                                 case 500:
                                     this.noError = false;
                                     this.noError = data.message;
+                                    if (data.message == "Maximum inventory in cart!"){
+                                        alert(data.message)
+                                    } else if (data.message == "Sorry we are out of stock!"){
+                                        alert(data.message)
+                                    }
                                     break;
                                 default:
                                     throw `${data.code}: ${data.message}`;
                             }
                         })
+                    this.getAllInventoryItems()
                 },
                 addedFirstItem(){
                     this.cartNum ++;
@@ -485,7 +491,7 @@ header("Access-Control-Allow-Origin: *");
         });
         $("#modal-close").click(function(){
             $("#modal").hide(500);
-            $('#login-sign-up').text('Victoria Lee');
+            $('#login-sign-up').text('Belle Kwang');
         });
         
 
@@ -507,7 +513,17 @@ header("Access-Control-Allow-Origin: *");
         });
     </script>
 
+<!-- for redirecting to payment -->
+<form id="invisible_form" action="http://localhost:5069/payment" method="post" target="_blank">
+    <input id="customer_id" name="customer_id" type="hidden" value="default">
+    <input id="customer_email" name="customer_email" type="hidden" value="default">
+    <input id="total_cost" name="total_cost" type="hidden" value="default">
+</form>
+
 <script>
+        //onload start
+        $('#payment-button').hide();
+        //onload end
         // anonymous async function 
         // - using await requires the function that calls it to be async
         $(async() => {           
@@ -594,7 +610,7 @@ header("Access-Control-Allow-Origin: *");
             var serviceURL = "http://127.0.0.1:5550/checkout";
             var customerData = ({
                 "customer_id": 1,
-                "customer_email": "tianyu.chen.2020@smu.edu.sg"
+                "customer_email": "kwangkaixuan@gmail.com"
             });
 
             try {
@@ -610,55 +626,77 @@ header("Access-Control-Allow-Origin: *");
                 const result = await response.json();
                     if (response.status === 200) {
                         //success
-                        $('checkout-button').hide();
-                        $('payment-button').show();
+                        alert("Inventory check success, please proceed with payment");
+                        $('#checkout-button').hide();
+                        $('#payment-button').show();
                     } else {
                         //not success
-                        alert(response.message);
+                        message = result["message"]
+                        if (response.status === 500 && message == 'Not enough stock, cart updated to max stock') {
+                            alert(result["message"]);
+                            location.reload();
+                        } else if (response.status === 404 && message == 'Cart is empty.') {
+                            alert(result["message"]);
+                            location.reload();
+                        } else {
+                            alert(result["message"]);
+                            location.reload();
+                        }
                     } 
                 } catch (error) {
                     // Errors when calling the service; such as network error, 
                     // service offline, etc
-                    console.log
-                        ('There is a problem checking out, please try again later.<br />' + error);
+                    console.log('There is a problem checking out, please try again later.<br />' + error);
                                 } // error
                         });
         }
 
         function payment() {
             $(async() => {           
-            // Change serviceURL to your own
-            var serviceURL = "http://127.0.0.1:5069/payment";
-            var customerData = ({
-                "customer_id": 1,
-                "customer_email": "tianyu.chen.2020@smu.edu.sg"
-            });
 
-            try {
-                const config = {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(customerData)
-                }
-                const response = await fetch(serviceURL, config)
-                const result = await response.json();
-                    if (response.status === 200) {
-                        //success
-                        $('checkout-button').hide();
-                        $('payment-button').show();
-                    } else {
-                        // unexpected outcome, throw the error
-                        alert(response.status);
-                    }
-                } catch (error) {
-                    // Errors when calling the service; such as network error, 
-                    // service offline, etc
-                    console.log
-                        ('There is a problem checking out, please try again later.<br />' + error);
-                                } // error
+
+                $('#customer_id').val('1');
+                $('#customer_email').val("kwangkaixuan@gmail.com");
+                $('#total_cost').val(10000);
+                $('#invisible_form').submit();
+                
+                
+                $('#payment-button').hide();
+                location.reload(); //refresh the page incase to prevent user from clicking payment many times
+                
+
+            // // Change serviceURL to your own
+            // var serviceURL = "http://127.0.0.1:5069/payment";
+            // var customerData = ({
+            //     "customer_id": 1,
+            //     "customer_email": "kwangkaixuan@gmail.com"
+            // });
+
+            // try {
+            //     const config = {
+            //         method: 'POST',
+            //         headers: {
+            //             'Accept': 'application/json',
+            //             'Content-Type': 'application/json',
+            //         },
+            //         body: JSON.stringify(customerData)
+            //     }
+            //     const response = await fetch(serviceURL, config)
+            //     const result = await response.json();
+            //         if (response.status === 200) {
+            //             //success
+            //             $('checkout-button').hide();
+            //             $('payment-button').show();
+            //         } else {
+            //             // unexpected outcome, throw the error
+            //             alert(response.status);
+            //         }
+            //     } catch (error) {
+            //         // Errors when calling the service; such as network error, 
+            //         // service offline, etc
+            //         console.log
+            //             ('There is a problem checking out, please try again later.<br />' + error);
+            //                     } // error
                         });
         }
     </script>

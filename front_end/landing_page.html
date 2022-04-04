@@ -199,6 +199,7 @@ header("Access-Control-Allow-Origin: *");
             });
         });
     </script>
+    
 <!-- for redirecting to payment -->
 <form id="invisible_form" action="http://localhost:5069/payment" method="post" target="_blank">
     <input id="customer_id" name="customer_id" type="hidden" value="default">
@@ -298,7 +299,7 @@ header("Access-Control-Allow-Origin: *");
                 var serviceURL = "http://127.0.0.1:5550/checkout";
                 var customerData = ({
                     "customer_id": 1,
-                    "customer_email": "tianyu.chen.2020@smu.edu.sg"
+                    "customer_email": "kwangkaixuan@gmail.com"
                 });
 
                 try {
@@ -342,21 +343,23 @@ header("Access-Control-Allow-Origin: *");
         function payment() {
             $(async () => {
                 // Change serviceURL to your own
-                var serviceURL = "http://127.0.0.1:5069/payment";
-                var customerData = ({
-                    "customer_id": 1,
-                    "customer_email": "tianyu.chen.2020@smu.edu.sg",
-                    "total_cost": 10000
-                });
+                // var serviceURL = "http://127.0.0.1:5069/payment";
+                // var customerData = ({
+                //     "customer_id": 1,
+                //     "customer_email": "kwangkaixuan@gmail.com",
+                //     "total_cost": 10000
+                // });
                 
                 $('#customer_id').val('1');
-                $('#customer_email').val("tianyu.chen.2020@smu.edu.sg");
+                $('#customer_email').val("kwangkaixuan@gmail.com");
                 $('#total_cost').val(10000);
                 $('#invisible_form').submit();
                 
                 
                 $('#payment-button').hide();
                 location.reload(); //refresh the page incase to prevent user from clicking payment many times
+                
+                
                 // try {
                 //     const config = {
                 //         method: 'POST',
