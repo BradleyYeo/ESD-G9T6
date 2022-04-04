@@ -101,7 +101,7 @@ def add_to_cart():
             ), 500
     else:
         cart = Cart(cart_id=cart_id, customer_id=data['customer_id'], product_id=data['product_id'],
-                    product_name=data['product_name'], price=data['price'], quantity=data['quantity'])
+                    product_name=data['product_name'], price=data['price'], quantity=1)
         try:
             db.session.add(cart)
             db.session.commit()
