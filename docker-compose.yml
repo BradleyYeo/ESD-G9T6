@@ -156,16 +156,16 @@ services:
   ###################################
   # Payment: The Payment microservice
   ###################################
-  # payment:
-  #   build:
-  #     context: ./payment
-  #     dockerfile: payment.Dockerfile
-  #   image: blazefire710/checkout:1.0
-  #   restart: always
-  #   environment:
-  #     PYTHONUNBUFFERED: 1
-  #   ports:
-  #     - "5000:5069"
+  payment:
+    build:
+      context: ./payment
+      dockerfile: payment.Dockerfile
+    image: blazefire710/payment:1.0
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5069:5069"
 
   
 

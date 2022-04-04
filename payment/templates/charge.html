@@ -132,7 +132,8 @@
         function checkout() {
             $(async() => {           
             // Change serviceURL to your own
-            var serviceURL = "http://localhost:5000/cart/remove_all/1";
+            // var serviceURL = "http://localhost:5000/cart/remove_all/1";
+            var serviceURL = "http://localhost:5550/checkout/payment_success";
             var customerData = ({
                 "customer_id": 1,
                 "customer_email": "tianyu.chen.2020@smu.edu.sg"
@@ -140,7 +141,7 @@
 
             try {
                 const config = {
-                    method: 'PUT',
+                    method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
@@ -153,6 +154,8 @@
                     if (response.status === 200) {
                         //success
                         console.log("success")
+                        console.log(response)
+                        // to display "Your order has been confirmed. Please check your email"
                     } else if (response.status == 400) {
                         //not success
                         console.log("failure")
