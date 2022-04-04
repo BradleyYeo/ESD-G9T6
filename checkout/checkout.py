@@ -148,7 +148,7 @@ def publish_receipt(customer_id, customer_email, cart_items):
     order_id = get_order_id()  # every sec is a new unique order_id
     total_price = calculate_total_price(cart_items)
     message = {
-        "created": str(datetime.now()),
+        "created": str(datetime.now().astimezone()),
         "customer_id": customer_id,
         "customer_email": customer_email,
         "order_id": order_id,
@@ -164,7 +164,7 @@ def publish_receipt(customer_id, customer_email, cart_items):
 def calculate_total_price(cart_items):
     total_price = 0
     for item in cart_items:
-        total_price += item["price"]
+        total_price += item["price"] * item["quantity"]
     return total_price
 
 

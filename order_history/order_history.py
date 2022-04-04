@@ -22,7 +22,7 @@ class OrderHistory(db.Model):
     __tablename__ = 'order_history'
 
     id = db.Column(db.Integer, primary_key=True)
-    created = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    created = db.Column(db.DateTime, nullable=False, default=datetime.now().astimezone())
     customer_email = db.Column(db.String(64), nullable=False)
     customer_id = db.Column(db.Integer, nullable=False)
     order_id = db.Column(db.Integer, nullable=False)
