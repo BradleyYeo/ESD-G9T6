@@ -158,7 +158,7 @@ header("Access-Control-Allow-Origin: *");
     <nav>
         <div class="nav-left">
             <a href="landing_page.html" class="nav-link">HOME</a>
-            <a href="items.html" class="nav-link">ITEMS</a>
+            <a href="items.php" class="nav-link">ITEMS</a>
         </div>
         <div class="nav-brand">
             <a href="landing_page.html"><span style="color: var(--blue); font-style: italic;">BLUE</span>MART</a>
@@ -258,8 +258,8 @@ header("Access-Control-Allow-Origin: *");
     </div>
 
     <script>
-        var get_all_URL = "http://192.168.1.3:5552/inventory";
-        var cart_URL = 'http://192.168.1.3:5000/cart'
+        var get_all_URL = "http://localhost:5552/inventory";
+        var cart_URL = 'http://localhost:5000/cart'
 
         const app = Vue.createApp({
             data(){
@@ -811,7 +811,7 @@ header("Access-Control-Allow-Origin: *");
         // - using await requires the function that calls it to be async
         $(async() => {           
             // Change serviceURL to your own
-            var serviceURL = "http://127.0.0.1:5000/cart/2";
+            var serviceURL = "http://127.0.0.1:5000/cart/1";
 
             try {
                 const response =
@@ -866,7 +866,7 @@ header("Access-Control-Allow-Origin: *");
                         console.log(result.message);
                         noItemsMsg = `<div id="no-cart-items">
                             <div class="no-cart-items">Your Cart is Empty</div>
-                            <a class="no-cart-items-btn" href="items.html">Shop for More</a>
+                            <a class="no-cart-items-btn" href="items.php">Shop for More</a>
                             </div>
                             `;
                         $('#cart-items').append(noItemsMsg);
