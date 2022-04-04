@@ -40,7 +40,7 @@ def checkout():
     # customer_id = data["customer_id"]
     total_price = 10000
     customer_id = 1
-    customer_email = "tianyu.chen.2020@.smu.edu.sg"
+    customer_email = "kwangkaixuan@gmail.com"
     # return render_template('checkout.html', key=stripe_keys['publishable_key'])  # this is the old one without passing data
     return render_template('checkout.html',key=stripe_keys['publishable_key'], total_price=total_price, customer_email=customer_email, customer_id=customer_id)
 
@@ -54,7 +54,7 @@ def charge():
     amount = 1000  # Amount in cents #currently hardcoded
 
     customer = stripe.Customer.create(
-        email='customer@example.com',
+        email='kwangkaixuan@gmail.com',
         source=request.form['stripeToken']
     )
 
