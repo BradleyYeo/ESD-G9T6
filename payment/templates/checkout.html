@@ -136,10 +136,14 @@
                 <input type="hidden" name="total_price" value="10000">
                 <input type="hidden" name="customer_email" value="tianyu.chen.2020@smu.edu.sg"> -->
                 
-                <!-- Trying out the data passing  -->
-                <input type="button" name="customer_id" value={{customer_id}}> <!-- nice it works here too-->
+                <!-- Trying out the data passing, ok the syntax works  -->
+                <!-- <input type="button" name="customer_id" value={{customer_id}}>
                 <input type="button" name="total_price" value={{total_price}}>
-                <input type="button" name="customer_email" value={{customer_email}}>
+                <input type="button" name="customer_email" value={{customer_email}}> -->
+
+                <input type="hidden" name="customer_id" value={{customer_id}}>
+                <input type="hidden" name="total_price" value={{total_price}}>
+                <input type="hidden" name="customer_email" value={{customer_email}}>
 
                 <script src="https://checkout.stripe.com/checkout.js" 
                     class="stripe-button"
