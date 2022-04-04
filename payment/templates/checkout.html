@@ -121,12 +121,17 @@
     <div id="hero">
         <div id="header">
             <h1>FRESHEST GROCERIES<br>FOR YOU</h1>
+            {total_price}
+            {customer_email}
+            {customer_id}
             <form action="/charge" method="post" id="checkout">
                 <!-- <article>
                     <label>
                         <span>Click below to proceed</span>
                     </label>
                 </article> -->
+                <input type="hidden" name="customer_id" value="1">
+                <input type="hidden" name="customer_email" value="tianyu.chen.2020@smu.edu.sg">
                 <input type="hidden" name="customer_id" value="1">
                 <input type="hidden" name="customer_email" value="tianyu.chen.2020@smu.edu.sg">
         

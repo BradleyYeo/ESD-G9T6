@@ -7,7 +7,11 @@ import stripe
 from dotenv import load_dotenv #this is to load the environment variables from the .env file!
 load_dotenv()
 
+from flask_cors import CORS
+
 app = Flask(__name__)
+
+CORS(app)
 
 stripe_keys = {
     "secret_key": os.environ["STRIPE_SECRET_KEY"],
@@ -25,7 +29,8 @@ def checkout():
     total_price = data["total_price"]
     customer_email = data["customer_email"]
     customer_id = data["customer_id"]
-    return render_template('checkout.html',key=stripe_keys['publishable_key'])
+    # return render_template('checkout.html',key=stripe_keys['publishable_key']) #this is the old one without passing data
+    return render_template('checkout.html',key=stripe_keys['publishable_key'], total_price=total_price, customer_email=customer_email, customer_id=customer_id)
 
 ##################stripe checkout payment session for payment details############
 @app.route('/charge', methods=['POST'])
