@@ -408,62 +408,17 @@ header("Access-Control-Allow-Origin: *");
 
                             });
                 },
-                addedFirstItem(){
-                    this.cartNum ++;
-                    let jsonData = JSON.stringify({
-                        "cart": [
-                            {
-                            "price": 400,
-                            "product_id": 1,
-                            "product_name": "apple",
-                            "quantity": 1,
-                            "add": false
-                            }
-                        ]
-                    });
-
-                    let cartData = JSON.stringify({
-                            "customer_id":1,
-                            "product_id": 1,
-                            "product_name": "apple",
-                            "price": 400,
-                            "quantity": 1
+                getItemXData(item_no){
+                        return JSON.stringify({
+                            "customer_id": 1,
+                            "product_id": this.items[item_no-1].product_id,
+                            "product_name": this.items[item_no-1].product_name,
+                            "price": this.items[item_no-1].price,
+                            "quantity": this.items[item_no-1].quantity
                     })
-                    //for inventory
-                    // fetch(`${get_all_URL}/update`,
-                    //     {
-                    //         method: "PUT",
-                    //         headers: {
-                    //             "Content-type": "application/json"
-                    //         },
-                    //         body: jsonData
-                    //     })
-                    //     .then(response => response.json())
-                    //     .then(data => {
-                    //         console.log(data);
-                    //         result = data.data;
-                    //         console.log(result);
-                    //         // 3 cases
-                    //         switch (data.code) {
-                    //             case 201:
-                    //                 this.noError = true;
-                    //                 // refresh inventory
-                    //                 this.getAllInventoryItems();
-
-                    //                 // an alternate way is to add this one element into this.books
-                    //                 break;
-                    //             case 400:
-                    //             case 500:
-                    //                 this.noError = false;
-                    //                 this.noError = data.message;
-                    //                 break;
-                    //             default:
-                    //                 throw `${data.code}: ${data.message}`;
-                    //         }
-                    //     })
-
-                        //for cart
-                        fetch(`${cart_URL}/add`,
+                },
+                fetchMethod(cartData){
+                    fetch(`${cart_URL}/add`,
                         {
                             method: "POST",
                             headers: {
@@ -480,10 +435,6 @@ header("Access-Control-Allow-Origin: *");
                             switch (data.code) {
                                 case 201:
                                     this.noError = true;
-                                    // refresh inventory
-                                    //this.getAllInventoryItems();
-
-                                    // an alternate way is to add this one element into this.books
                                     break;
                                 case 400:
                                 case 500:
@@ -495,275 +446,30 @@ header("Access-Control-Allow-Origin: *");
                             }
                         })
                 },
+                addedFirstItem(){
+                    this.cartNum ++;
+                    this.fetchMethod(this.getItemXData(1));
+                },
                 addedSecondItem(){
                     this.cartNum ++;
-                    let jsonData = JSON.stringify({
-                        "cart": [
-                            {
-                            "price": 300,
-                            "product_id": 2,
-                            "product_name": "banana",
-                            "quantity": 1,
-                            "add": false
-                            }
-                        ]
-                    });
-
-                    // fetch(`${get_all_URL}/update`,
-                    //     {
-                    //         method: "PUT",
-                    //         headers: {
-                    //             "Content-type": "application/json"
-                    //         },
-                    //         body: jsonData
-                    //     })
-                    //     .then(response => response.json())
-                    //     .then(data => {
-                    //         console.log(data);
-                    //         result = data.data;
-                    //         console.log(result);
-                    //         // 3 cases
-                    //         switch (data.code) {
-                    //             case 201:
-                    //                 this.noError = true;
-                    //                 // refresh inventory
-                    //                 this.getAllInventoryItems();
-
-                    //                 // an alternate way is to add this one element into this.books
-                    //                 break;
-                    //             case 400:
-                    //             case 500:
-                    //                 this.noError = false;
-                    //                 this.noError = data.message;
-                    //                 break;
-                    //             default:
-                    //                 throw `${data.code}: ${data.message}`;
-                    //         }
-                    //     })
-                },addedThirdItem(){
+                    this.fetchMethod(this.getItemXData(2))
+                },
+                addedThirdItem(){
                     this.cartNum ++;
-                    let jsonData = JSON.stringify({
-                        "cart": [
-                            {
-                            "price": 500,
-                            "product_id": 3,
-                            "product_name": "pineapple",
-                            "quantity": 1,
-                            "add": false
-                            }
-                        ]
-                    });
-
-                    // fetch(`${get_all_URL}/update`,
-                    //     {
-                    //         method: "PUT",
-                    //         headers: {
-                    //             "Content-type": "application/json"
-                    //         },
-                    //         body: jsonData
-                    //     })
-                    //     .then(response => response.json())
-                    //     .then(data => {
-                    //         console.log(data);
-                    //         result = data.data;
-                    //         console.log(result);
-                    //         // 3 cases
-                    //         switch (data.code) {
-                    //             case 201:
-                    //                 this.noError = true;
-                    //                 // refresh inventory
-                    //                 this.getAllInventoryItems();
-
-                    //                 // an alternate way is to add this one element into this.books
-                    //                 break;
-                    //             case 400:
-                    //             case 500:
-                    //                 this.noError = false;
-                    //                 this.noError = data.message;
-                    //                 break;
-                    //             default:
-                    //                 throw `${data.code}: ${data.message}`;
-                    //         }
-                    //     })
+                    this.fetchMethod(this.getItemXData(3))
                 },
                 addedForthItem(){
                     this.cartNum ++;
-                    let jsonData = JSON.stringify({
-                        "cart": [
-                            {
-                            "price": 100,
-                            "product_id": 4,
-                            "product_name": "orange",
-                            "quantity": 1,
-                            "add": false
-                            }
-                        ]
-                    });
-
-                    // fetch(`${get_all_URL}/update`,
-                    //     {
-                    //         method: "PUT",
-                    //         headers: {
-                    //             "Content-type": "application/json"
-                    //         },
-                    //         body: jsonData
-                    //     })
-                    //     .then(response => response.json())
-                    //     .then(data => {
-                    //         console.log(data);
-                    //         result = data.data;
-                    //         console.log(result);
-                    //         // 3 cases
-                    //         switch (data.code) {
-                    //             case 201:
-                    //                 this.noError = true;
-                    //                 // refresh inventory
-                    //                 this.getAllInventoryItems();
-
-                    //                 // an alternate way is to add this one element into this.books
-                    //                 break;
-                    //             case 400:
-                    //             case 500:
-                    //                 this.noError = false;
-                    //                 this.noError = data.message;
-                    //                 break;
-                    //             default:
-                    //                 throw `${data.code}: ${data.message}`;
-                    //         }
-                    //     })
+                    this.fetchMethod(this.getItemXData(4))
                 },
                 addedFifthItem(){
                     this.cartNum ++;
-                    let jsonData = JSON.stringify({
-                        "cart": [
-                            {
-                            "price": 110,
-                            "product_id": 5,
-                            "product_name": "pear",
-                            "quantity": 1,
-                            "add": false
-                            }
-                        ]
-                    });
-
-                    // fetch(`${get_all_URL}/update`,
-                    //     {
-                    //         method: "PUT",
-                    //         headers: {
-                    //             "Content-type": "application/json"
-                    //         },
-                    //         body: jsonData
-                    //     })
-                    //     .then(response => response.json())
-                    //     .then(data => {
-                    //         console.log(data);
-                    //         result = data.data;
-                    //         console.log(result);
-                    //         // 3 cases
-                    //         switch (data.code) {
-                    //             case 201:
-                    //                 this.noError = true;
-                    //                 // refresh inventory
-                    //                 this.getAllInventoryItems();
-
-                    //                 // an alternate way is to add this one element into this.books
-                    //                 break;
-                    //             case 400:
-                    //             case 500:
-                    //                 this.noError = false;
-                    //                 this.noError = data.message;
-                    //                 break;
-                    //             default:
-                    //                 throw `${data.code}: ${data.message}`;
-                    //         }
-                    //     })
+                    this.fetchMethod(this.getItemXData(5))
                 },
                 addedSixthItem(){
                     this.cartNum ++;
-                    let jsonData = JSON.stringify({
-                        "cart": [
-                            {
-                            "price": 500,
-                            "product_id": 6,
-                            "product_name": "grapes",
-                            "quantity": 1,
-                            "add": false
-                            }
-                        ]
-                    });
-
-                    // fetch(`${get_all_URL}/update`,
-                    //     {
-                    //         method: "PUT",
-                    //         headers: {
-                    //             "Content-type": "application/json"
-                    //         },
-                    //         body: jsonData
-                    //     })
-                    //     .then(response => response.json())
-                    //     .then(data => {
-                    //         console.log(data);
-                    //         result = data.data;
-                    //         console.log(result);
-                    //         // 3 cases
-                    //         switch (data.code) {
-                    //             case 201:
-                    //                 this.noError = true;
-                    //                 // refresh inventory
-                    //                 this.getAllInventoryItems();
-
-                    //                 // an alternate way is to add this one element into this.books
-                    //                 break;
-                    //             case 400:
-                    //             case 500:
-                    //                 this.noError = false;
-                    //                 this.noError = data.message;
-                    //                 break;
-                    //             default:
-                    //                 throw `${data.code}: ${data.message}`;
-                    //         }
-                    //     })
-                },
-                // checkout(){
-                //     let jsonData = JSON.stringify({
-                //         "customer_id": 123456,
-                //         "customer_email": "abc@abc"
-                //     });
-
-                //     //for cart
-                //     fetch(`/checkout`,
-                //     {
-                //         method: "POST",
-                //         headers: {
-                //             "Content-type": "application/json"
-                //         },
-                //         body: jsonData
-                //     })
-                //     .then(response => response.json())
-                //     .then(data => {
-                //         console.log(data);
-                //         result = data.data;
-                //         console.log(result);
-                //         // 3 cases
-                //         switch (data.code) {
-                //             case 201:
-                //                 this.noError = true;
-                //                 // refresh inventory
-                //                 //this.getAllInventoryItems();
-
-                //                 // an alternate way is to add this one element into this.books
-                //                 break;
-                //             case 400:
-                //             case 500:
-                //                 this.noError = false;
-                //                 this.noError = data.message;
-                //                 break;
-                //             default:
-                //                 throw `${data.code}: ${data.message}`;
-                //         }
-                //     })
-                // }
-               
+                    this.fetchMethod(this.getItemXData(6))
+                }
             },
             created(){
                 this.getAllInventoryItems();

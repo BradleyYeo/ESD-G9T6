@@ -84,29 +84,42 @@ def get_cart(customer_id):
 def add_to_cart():
     cart_id = 0
     data = request.get_json()
-    cart = Cart(cart_id=cart_id, customer_id=data['customer_id'], product_id=data['product_id'],
-                product_name=data['product_name'], price=data['price'], quantity=data['quantity'])
+    dbitem = Cart.query.filter_by(customer_id=data['customer_id'], product_id=data['product_id']).first()
+
     # if item is already in cart
-
-    try:
-        db.session.add(cart)
-        db.session.commit()
-        return jsonify(
-            {
-                "code": 200,
-                "data": {},
-                "message": "Item added to cart."
-            }
-        ), 200
-    except Exception as e:
-        return jsonify(
-            {
-                "code": 500,
-                "data": {},
-                "message": "An error occured creating the cart"
-            }
-        ), 500
-
+    if dbitem:
+        try:
+            dbitem.quantity += 1
+            db.session.commit()
+        except Exception as e:
+            return jsonify(
+                {
+                    "code": 500,
+                    "data": {},
+                    "message": "An error occured creating the cart"
+                }
+            ), 500
+    else:
+        cart = Cart(cart_id=cart_id, customer_id=data['customer_id'], product_id=data['product_id'],
+                    product_name=data['product_name'], price=data['price'], quantity=data['quantity'])
+        try:
+            db.session.add(cart)
+            db.session.commit()
+        except Exception as e:
+            return jsonify(
+                {
+                    "code": 500,
+                    "data": {},
+                    "message": "An error occured creating the cart"
+                }
+            ), 500
+    return jsonify(
+        {
+            "code": 200,
+            "data": {},
+            "message": "Item added to cart."
+        }
+    ), 200
 
 # REMOVE ALL ITEMS FROM CUSTOMER'S CART
 @app.route("/cart/remove_all/<int:customer_id>", methods=['PUT'])
