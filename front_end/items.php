@@ -159,7 +159,7 @@ header("Access-Control-Allow-Origin: *");
             <a href="landing_page.html"><span style="color: var(--blue); font-style: italic;">BLUE</span>MART</a>
         </div>
         <div class="nav-right">
-            <a href="" class="nav-link">LOGIN/SIGN UP</a>
+        <div class="nav-link" id="login-sign-up">LOGIN/SIGN UP</div>
             <div class="cart-button" id="cart-button">CART ( <span id="cart_num">0</span> )</div>
         </div>
     </nav>
@@ -541,7 +541,7 @@ header("Access-Control-Allow-Origin: *");
         });
         $("#modal-close").click(function(){
             $("#modal").hide(500);
-            $('#login-sign-up').text('Belle Kwang');
+            $('#login-sign-up').text('Victoria Lee');
         });
         
 
