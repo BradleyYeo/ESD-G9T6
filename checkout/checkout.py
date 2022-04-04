@@ -1,9 +1,11 @@
-import time
+# #!/usr/bin/env python3
+# # The above shebang (#!) operator tells Unix-like environments
+# # to run this file as a python3 script
 import json
 import os
-from os import environ
-
+import time
 from datetime import datetime
+from os import environ
 
 import pika
 from flask import Flask, request, jsonify
@@ -17,6 +19,7 @@ CORS(app)
 
 inventory_URL = environ.get('inventory_URL') or "http://inventory:5552/inventory"
 cart_URL = environ.get('cart_URL') or "http://cart:5000/cart"
+
 
 @app.route("/checkout", methods=['POST'])
 def checkout():
@@ -64,7 +67,7 @@ def process_checkout(customer_id, customer_email):
             print("Unexpected error from cart, exiting")
             return {"code": code, "message": str(cart_response)}
 
-    print("Reterival of cart items success")
+    print("Retrieval of cart items success")
     cart_items = cart_response["data"]["cart"]
 
     print('\n-----Invoking inventory microservice-----')
@@ -73,7 +76,7 @@ def process_checkout(customer_id, customer_email):
 
     code = inventory_response["code"]
     print(str(inventory_response))
-    
+
     if code not in range(200, 300):
         print("Inventory returned error")
         if code == 500 and inventory_response["message"].lower() == "not enough stock.":
@@ -86,22 +89,23 @@ def process_checkout(customer_id, customer_email):
             if cart_response["code"] == 200 and cart_response["message"].lower() == "cart updated.":
                 return {"code": code, "data": new_cart, "message": "Not enough stock, cart updated to max stock"}
             else:
-                return {"code": code, "data": new_cart, "message": "Not enough stock, cart unexpectedly failed to update to max stock"}
+                return {"code": code, "data": new_cart,
+                        "message": "Not enough stock, cart unexpectedly failed to update to max stock"}
         else:
             print("Unexpected error from inventory, exiting")
             return {"code": code, "message": str(inventory_response)}
-    
+
 
     elif inventory_response["message"].lower() == "inventory decreased.":
         print("Inventory check success")
         return {
-            "code": code, 
+            "code": code,
             "data": {
-                "customer_id":customer_id,
+                "customer_id": customer_id,
                 "cart": cart_items
-                },
+            },
             "message": "Inventory check success, inventory decreased"
-            }
+        }
 
     # ##################################################################################################
     # Invoking payment microservice done with UI
@@ -109,7 +113,6 @@ def process_checkout(customer_id, customer_email):
 
 
 def process_checkout_payment_success(customer_id, customer_email):
-
     print("\n-----Invoking cart microservice-----")
     print("Getting customer's cart with their ID")
     cart_response = invoke_http(url=cart_URL + "/" + str(customer_id), method='GET', json=None)
@@ -117,12 +120,12 @@ def process_checkout_payment_success(customer_id, customer_email):
     code = cart_response["code"]
     if code not in range(200, 300):
         if code == 404 and cart_response["message"].lower() == "cart is empty.":
-            return {"code": code, "message": "Cart is empty."} #should never happen
+            return {"code": code, "message": "Cart is empty."}  # should never happen
         else:
             print("Unexpected error from cart, exiting")
             return {"code": code, "message": str(cart_response)}
 
-    print("Reterival of cart items success")
+    print("Retrieval of cart items success")
     cart_items = cart_response["data"]["cart"]
 
     print("\n-----Publishing receipt to message broker-----")
@@ -140,11 +143,10 @@ def process_checkout_payment_success(customer_id, customer_email):
     return {"code": code, "message": "Everything is successful."}
 
 
-
 def publish_receipt(customer_id, customer_email, cart_items):
     amqp_setup.check_setup()
-    order_id = get_order_id()  # every sec is a new unidque order_id
-    total_price = calcalate_total_price(cart_items)
+    order_id = get_order_id()  # every sec is a new unique order_id
+    total_price = calculate_total_price(cart_items)
     message = {
         "created": str(datetime.now()),
         "customer_id": customer_id,
@@ -159,11 +161,12 @@ def publish_receipt(customer_id, customer_email, cart_items):
                                      body=message, properties=pika.BasicProperties(delivery_mode=2))
 
 
-def calcalate_total_price(cart_items):
+def calculate_total_price(cart_items):
     total_price = 0
     for item in cart_items:
         total_price += item["price"]
     return total_price
+
 
 def get_order_id():
     date_time_str = '03/04/22 00:00:00'
@@ -171,7 +174,6 @@ def get_order_id():
     unix_timestamp = time.mktime(date_time_obj.timetuple())
     now_unix_timestamp = time.mktime(datetime.now().timetuple())
     return int(now_unix_timestamp - unix_timestamp)
-
 
 
 if __name__ == "__main__":
