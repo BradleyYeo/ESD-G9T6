@@ -158,7 +158,7 @@ header("Access-Control-Allow-Origin: *");
     <nav>
         <div class="nav-left">
             <a href="landing_page.html" class="nav-link">HOME</a>
-            <a href="items.html" class="nav-link">ITEMS</a>
+            <a href="items.php" class="nav-link">ITEMS</a>
         </div>
         <div class="nav-brand">
             <a href="landing_page.html"><span style="color: var(--blue); font-style: italic;">BLUE</span>MART</a>
@@ -866,7 +866,7 @@ header("Access-Control-Allow-Origin: *");
                         console.log(result.message);
                         noItemsMsg = `<div id="no-cart-items">
                             <div class="no-cart-items">Your Cart is Empty</div>
-                            <a class="no-cart-items-btn" href="items.html">Shop for More</a>
+                            <a class="no-cart-items-btn" href="items.php">Shop for More</a>
                             </div>
                             `;
                         $('#cart-items').append(noItemsMsg);
