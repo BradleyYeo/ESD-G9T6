@@ -70,6 +70,10 @@
     margin-right: auto;
 }
 
+#payment-button{
+    background-color: lightgreen;
+}
+
 #checkout-button img, #payment-button img{
     width: 30px;
 }

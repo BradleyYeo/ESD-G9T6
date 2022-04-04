@@ -344,7 +344,7 @@ header("Access-Control-Allow-Origin: *");
 
                 try {
                     const config = {
-                        method: 'POST',
+                        method: 'GET',
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json',
