@@ -130,14 +130,21 @@
                         <span>Click below to proceed</span>
                     </label>
                 </article> -->
+                
+                <!-- Original working one -->
+                <!-- <input type="hidden" name="customer_id" value="1">
+                <input type="hidden" name="total_price" value="10000">
+                <input type="hidden" name="customer_email" value="tianyu.chen.2020@smu.edu.sg"> -->
+                
+                <!-- Trying out the data passing  -->
+                <input type="button" name="customer_id" value={{customer_id}}> <!-- nice it works here too-->
+                <input type="button" name="total_price" value={{total_price}}>
+                <input type="button" name="customer_email" value={{customer_email}}>
 
-                <input type="hidden" name="customer_id" value="1">
-                <input type="hidden" name="customer_email" value="tianyu.chen.2020@smu.edu.sg">
-        
                 <script src="https://checkout.stripe.com/checkout.js" 
                     class="stripe-button"
                     data-key="{{ key }}"
-                    data-description="Bluemart Checkout"        data-amount="1000"
+                    data-description="Bluemart Checkout"        data-amount="10000"
                     data-locale="auto">
                 </script>
             </form>
