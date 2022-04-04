@@ -51,7 +51,7 @@
     font-size: larger;
 }
 
-#checkout-button {
+#checkout-button, #payment-button{
     width: 50%;
     height: 10vh;
     border-radius: 20px;
@@ -70,7 +70,7 @@
     margin-right: auto;
 }
 
-#checkout-button img {
+#checkout-button img, #payment-button img{
     width: 30px;
 }
 

@@ -201,6 +201,10 @@ header("Access-Control-Allow-Origin: *");
     </script>
 
     <script>
+        //onload start
+        $('#payment-button').hide();
+        //onload end
+
         // anonymous async function 
         // - using await requires the function that calls it to be async
         $(async () => {
@@ -304,8 +308,9 @@ header("Access-Control-Allow-Origin: *");
                     const result = await response.json();
                     if (response.status === 200) {
                         //success
-                        $('checkout-button').hide();
-                        $('payment-button').show();
+                        alert("Inventory check success, please proceed with payment");
+                        $('#checkout-button').hide();
+                        $('#payment-button').show();
                     } else {
                         //not success
                         message = result["message"]
@@ -350,8 +355,8 @@ header("Access-Control-Allow-Origin: *");
                     const result = await response.json();
                     if (response.status === 200) {
                         //success
-                        $('checkout-button').hide();
-                        $('payment-button').show();
+                        $('#checkout-button').hide();
+                        $('#payment-button').show();
                     } else {
                         // unexpected outcome, throw the error
                         alert(response.status);
