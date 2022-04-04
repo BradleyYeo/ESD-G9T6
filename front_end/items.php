@@ -811,7 +811,7 @@ header("Access-Control-Allow-Origin: *");
         // - using await requires the function that calls it to be async
         $(async() => {           
             // Change serviceURL to your own
-            var serviceURL = "http://127.0.0.1:5000/cart/2";
+            var serviceURL = "http://127.0.0.1:5000/cart/1";
 
             try {
                 const response =
