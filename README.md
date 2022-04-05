@@ -11,3 +11,5 @@ Load order_history.sql from order_history package into phpMyAdmin
 Ensure rabbit mq is not running as we are using the same port as the labs
 
 Run docker-compose up
+
+In a new command window inside the payment folder, run the stripe webhook to listen for user payments  by typing stripe listen --forward-to 127.0.0.1:5069/webhook
