@@ -34,15 +34,10 @@ class InventoryModel(db.Model):
                 "price": self.price}
 
 
-# class NotEnoughStock(Exception):
-#     """Not enough stock"""
-#     pass
-
-
 @app.route('/inventory/all')
 def get_all():
     inventory = InventoryModel.query.all()
-    if len(inventory):  # 1 and above is true in python
+    if len(inventory):
         return jsonify(
             {
                 "code": 200,
@@ -122,7 +117,6 @@ def reduce_inventory():
         ), 500
 
 
-# not tested with complex
 @app.route("/inventory/add", methods=["PUT"])
 def add_inventory():
     data = request.get_json()
@@ -151,4 +145,4 @@ def add_inventory():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5552, debug=True)  # right number for docker compose
+    app.run(host="0.0.0.0", port=5552, debug=True)
