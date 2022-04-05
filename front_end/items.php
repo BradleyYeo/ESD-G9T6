@@ -189,7 +189,7 @@ header("Access-Control-Allow-Origin: *");
                             <img src ="img/1.webp"/>
                         </div>
                             <h3> Item: {{firstProductName}} </h3> 
-                            <p> Price: ${{firstPrice}}.00 </p>
+                            <p> Price: ${{firstPrice}} </p>
                             <p> Product ID: {{firstProductId}}</p>
                             <p id="firstQuantity"> Quantity Available:{{firstQuantity}}</p> 
                             <button v-on:click="addedFirstItem" type="button" class="button" id="button1">Add to Cart!</button>
@@ -199,7 +199,7 @@ header("Access-Control-Allow-Origin: *");
                             <img src ="img/2.webp"/>
                         </div>
                             <h3> Item: {{secondProductName}} </h3> 
-                            <p> Price: ${{secondPrice}}.00</p>
+                            <p> Price: ${{secondPrice}}</p>
                             <p> Product ID: {{secondProductId}}</p>
                             <p id="firstQuantity"> Quantity Available:{{secondQuantity}}</p> 
                             <button v-on:click="addedSecondItem" type="button" class="button" id="button2">Add to Cart!</button>
@@ -209,7 +209,7 @@ header("Access-Control-Allow-Origin: *");
                             <img src ="img/3.webp"/>
                         </div>
                             <h3> Item: {{thirdProductName}} </h3> 
-                            <p> Price: ${{thirdPrice}}.00</p>
+                            <p> Price: ${{thirdPrice}}</p>
                             <p> Product ID: {{thirdProductId}}</p>
                             <p id="firstQuantity"> Quantity Available:{{thirdQuantity}}</p> 
                             <button v-on:click="addedThirdItem" type="button" class="button" id="button3">Add to Cart!</button>
@@ -221,7 +221,7 @@ header("Access-Control-Allow-Origin: *");
                             <img src ="img/4.jpeg"/>
                         </div>
                             <h3> Item: {{forthProductName}} </h3> 
-                            <p> Price: {{forthPrice}} cents</p>
+                            <p> Price: ${{forthPrice}}</p>
                             <p> Product ID: {{forthProductId}}</p>
                             <p id="forthQuantity"> Quantity Available:{{forthQuantity}}</p> 
                             <button v-on:click="addedForthItem" type="button" class="button" id="button4">Add to Cart!</button>
@@ -231,7 +231,7 @@ header("Access-Control-Allow-Origin: *");
                             <img src ="img/5.jpeg"/>
                         </div>
                             <h3> Item: {{fifthProductName}} </h3> 
-                            <p> Price: ${{fifthPrice}}.00</p>
+                            <p> Price: ${{fifthPrice}}</p>
                             <p> Product ID: {{fifthProductId}}</p>
                             <p id="fifthQuantity"> Quantity Available:{{fifthQuantity}}</p> 
                             <button v-on:click="addedFifthItem" type="button" class="button" id="button5">Add to Cart!</button>
@@ -241,7 +241,7 @@ header("Access-Control-Allow-Origin: *");
                             <img src ="img/6.webp"/>
                         </div>
                             <h3> Item: {{sixthProductName}} </h3> 
-                            <p> Price: ${{sixthPrice}}.00</p>
+                            <p> Price: ${{sixthPrice}}</p>
                             <p> Product ID: {{sixthProductId}}</p>
                             <p id="sixthQuantity"> Quantity Available:{{sixthQuantity}}</p> 
                             <button v-on:click="addedSixthItem" type="button" class="button" id="button6">Add to Cart!</button>
