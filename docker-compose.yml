@@ -7,7 +7,6 @@ services:
 
   ####################################
   # RabbitMQ: The messaging broker   
-  # Completed
   ####################################
   rabbitmq:
     image: rabbitmq:3-management
@@ -21,7 +20,6 @@ services:
       
   #################################################
   # Notification: The Notification microservice
-  # Completed
   #################################################
   notification:
     build:
@@ -38,7 +36,6 @@ services:
 
   ##################################
   # Inventory: The Inventory microservice
-  # Completed
   ##################################
   inventory:
     build:
@@ -54,7 +51,7 @@ services:
 
 
   ##################################
-  # WIP
+  # Cart: The Cart microservice
   ##################################
   cart:
     build:
@@ -69,8 +66,7 @@ services:
       - "5000:5000"
       
   #################################################
-  # Order_history: The Order_history microservice
-  # Completed
+  # Order_history: The Order_history microservice and its wrapper
   #################################################
 
   order_history:
@@ -103,10 +99,9 @@ services:
       rabbit_host: rabbitmq
       rabbit_port: 5672
 
-  # ###############################################
-  # # WIP
-  # # Checkout: Checkout microservice
-  # ###############################################
+  ###############################################
+  # Checkout: Checkout microservice
+  ###############################################
   checkout:
     build:
       context: ./checkout
@@ -116,7 +111,7 @@ services:
     depends_on:
       - cart
       - inventory
-      # - payment               #to connect to payment
+      - payment
       - rabbitmq
       - order_history
       - order_history_wrapper
@@ -129,29 +124,6 @@ services:
       PYTHONUNBUFFERED: 1
     ports:
       - "5550:5550"
-
-  # ###############################################
-  # placeholder cart and inventory
-  # ###############################################
-  # NOT IN USED ANYMORE
-  # inventory_placeholder:
-  #   build:
-  #     context: ./checkout
-  #     dockerfile: inventory.Dockerfile
-  #   image: tame123/inventory:1.0
-  #   restart: always
-  #   environment:
-  #     PYTHONUNBUFFERED: 1
-  
-  # NOT IN USED ANYMORE
-  # cart_placeholder:
-  #   build:
-  #     context: ./checkout
-  #     dockerfile: cart.Dockerfile
-  #   image: tame123/cart:1.0
-  #   restart: always
-  #   environment:
-  #     PYTHONUNBUFFERED: 1
 
   ###################################
   # Payment: The Payment microservice
@@ -166,23 +138,3 @@ services:
       PYTHONUNBUFFERED: 1
     ports:
       - "5069:5069"
-
-  
-
-  ###################################
-  # delete this MS when deploying
-  ###################################
-  # test_notification:
-  #   build:
-  #     context: ./notification_test
-  #     dockerfile: test.Dockerfile
-  #   image: tame123/test:1.0
-  #   restart: always
-  #   depends_on:
-  #     - rabbitmq
-  #   environment:
-  #     PYTHONUNBUFFERED: 1
-  #     rabbit_host: rabbitmq
-  #     rabbit_port: 5672
-  #   ports:
-  #     - "7000:7000"

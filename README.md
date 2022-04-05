@@ -13,3 +13,6 @@ Ensure rabbit mq is not running as we are using the same port as the labs
 Run docker-compose up
 
 In a new command window inside the payment folder, run the stripe webhook to listen for user payments  by typing stripe listen --forward-to 127.0.0.1:5069/webhook (your device must be registered and authorized inside Stripe API as a local listener for this to work)
+
+in payment/templates/charge.html, once payment is complete, redirecting to the UI is hardcoded in line 125 http://localhost/ESD-G9T6/front_end/landing_page.html
+path may be different depending on where the folder is placed
